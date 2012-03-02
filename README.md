@@ -63,8 +63,8 @@ but if you use some imagination you can do some pretty neat things.
 The Wordpress functionality is an example of what you can do to cut the
 fat on your plugin code and keep it a bit more modular and organized.
 
-Okay, lets get all infomercial - I'll do a before and after and explain why
-I think this is helpful. Here is some typical plugin code.
+Okay, lets get all infomercial - I'll do a before and after to demonstrate the
+Wordpress functionality and why its good. Here is some typical plugin code.
 
     <?php
     
@@ -79,7 +79,32 @@ I think this is helpful. Here is some typical plugin code.
         $arg1 = "You've been filtered!";
         return $arg1;
     }
-    add_action('some_filter', 'namespace_some_filter', 10 );
+    add_filter('some_filter', 'namespace_some_filter', 10 );
     
-Alright... 
+Alright... thats okay. But how about this instead:
+
+    <?php
+    
+    class MyNamespace extends Snap_Wordpress_Plugin
+    {
+        /**
+         * @wp.action
+         */
+        public function some_action( $arg1, $arg2, $arg3 )
+        {
+            echo "Getting some action!";
+        }
+        
+        /**
+         * @wp.filter
+         */
+        public function some_filter( $arg1 )
+        {
+            $arg1 = "You've been filtered!";
+            return $arg1;
+        }
+        
+    }
+    
+    
     
