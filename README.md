@@ -57,8 +57,29 @@ Check this out...
     // how about default values?
     echo $snap->property('p2', 'no.such.meta', 'Oh well'); // will print "Oh well"
     
-Well, you might think thats boring, but if you use some imagination you can
-do some pretty neat things with that...
+Well, you might be thinking, "whoopdee doo buddy, thats pretty boring",
+but if you use some imagination you can do some pretty neat things. 
 
-The Wordpress functionality is built around the Snap_Reflection object, and
-it really helps cut down on, what I find to be, verbose code...
+The Wordpress functionality is an example of what you can do to cut the
+fat on your plugin code and keep it a bit more modular and organized.
+
+Okay, lets get all infomercial - I'll do a before and after and explain why
+I think this is helpful. Here is some typical plugin code.
+
+    <?php
+    
+    function namespace_some_action( $arg1, $arg2, $arg3 )
+    {
+        echo "Getting some action!";
+    }
+    add_action('some_action', 'namespace_some_action', 10, 3 );
+    
+    function namespace_some_filter( $arg1 )
+    {
+        $arg1 = "You've been filtered!";
+        return $arg1;
+    }
+    add_action('some_filter', 'namespace_some_filter', 10 );
+    
+Alright... 
+    
