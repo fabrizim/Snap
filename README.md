@@ -7,7 +7,7 @@ It also provides a simple Class Loader as well as some goodies for
 Wordpress, which should probably be made a bit more abstract for use
 in any library, but I just don't have the time for that right now.
 
-## Example
+### Example
 
 To use snap, all you need to do is include the library file and then
 reap the benefits.
