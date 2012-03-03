@@ -14,48 +14,50 @@ reap the benefits.
 
 Check this out...
 
-    <?php
-    
-    // first include the library
-    require( 'path/to/snap/directory/index.php' );
-    
-    // now lets define a class with some documents for use later.
+```php
+<?php
+
+// first include the library
+require( 'path/to/snap/directory/index.php' );
+
+// now lets define a class with some documents for use later.
+
+/**
+ * Dummy Class
+ *
+ * @some.property           Foo
+ * @some.other.property     Bar
+ */
+class DummyClass
+{
+    /**
+     * @my.meta                 Meta Value
+     */
+    public $p1;
     
     /**
-     * Dummy Class
-     *
-     * @some.property           Foo
-     * @some.other.property     Bar
+     * @my.meta                 Other Meta Value
      */
-    class DummyClass
+    public $p2;
+    
+    /**
+     * @my.super.meta           Super Awesome Meta
+     */ 
+    public function exampleFunction()
     {
-        /**
-         * @my.meta                 Meta Value
-         */
-        public $p1;
         
-        /**
-         * @my.meta                 Other Meta Value
-         */
-        public $p2;
-        
-        /**
-         * @my.super.meta           Super Awesome Meta
-         */ 
-        public function exampleFunction()
-        {
-            
-        }
     }
-    
-    // Now what? Let's get a Snap_Reflection object for that class
-    $snap = Snap::get( 'DummyClass' );
-    
-    // and what can I do with it?
-    echo $snap->property('p2', 'my.meta'); // will print "Other Meta Value"
-    
-    // how about default values?
-    echo $snap->property('p2', 'no.such.meta', 'Oh well'); // will print "Oh well"
+}
+```
+
+// Now what? Let's get a Snap_Reflection object for that class
+$snap = Snap::get( 'DummyClass' );
+
+// and what can I do with it?
+echo $snap->property('p2', 'my.meta'); // will print "Other Meta Value"
+
+// how about default values?
+echo $snap->property('p2', 'no.such.meta', 'Oh well'); // will print "Oh well"
     
 Well, you might be thinking, "whoopdee doo buddy, thats pretty boring",
 but if you use some imagination you can do some pretty neat things. 
@@ -66,45 +68,46 @@ fat on your plugin code and keep it a bit more modular and organized.
 Okay, lets get all infomercial - I'll do a before and after to demonstrate the
 Wordpress functionality and why its good. Here is some typical plugin code.
 
-    <?php
+```php
+<?php
+
+function namespace_some_action( $arg1, $arg2, $arg3 )
+{
+    echo "Getting some action!";
+}
+add_action('some_action', 'namespace_some_action', 10, 3 );
+
+function namespace_some_filter( $arg1 )
+{
+    $arg1 = "You've been filtered!";
+    return $arg1;
+}
+add_filter('some_filter', 'namespace_some_filter', 10 );
+```
     
-    function namespace_some_action( $arg1, $arg2, $arg3 )
+Alright... thats okay. But how about this instead:
+
+```
+<?php
+
+class MyNamespace extends Snap_Wordpress_Plugin
+{
+    /**
+     * @wp.action
+     */
+    public function some_action( $arg1, $arg2, $arg3 )
     {
         echo "Getting some action!";
     }
-    add_action('some_action', 'namespace_some_action', 10, 3 );
     
-    function namespace_some_filter( $arg1 )
+    /**
+     * @wp.filter
+     */
+    public function some_filter( $arg1 )
     {
         $arg1 = "You've been filtered!";
         return $arg1;
     }
-    add_filter('some_filter', 'namespace_some_filter', 10 );
     
-Alright... thats okay. But how about this instead:
-
-    <?php
-    
-    class MyNamespace extends Snap_Wordpress_Plugin
-    {
-        /**
-         * @wp.action
-         */
-        public function some_action( $arg1, $arg2, $arg3 )
-        {
-            echo "Getting some action!";
-        }
-        
-        /**
-         * @wp.filter
-         */
-        public function some_filter( $arg1 )
-        {
-            $arg1 = "You've been filtered!";
-            return $arg1;
-        }
-        
-    }
-    
-    
-    
+}
+```
