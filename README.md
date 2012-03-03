@@ -36,7 +36,8 @@ class DummyClass
     public $p1;
     
     /**
-     * @my.meta                 Other Meta Value
+     * @my.meta.array           ["Some","array","of","values","in","json","format"]
+     * @my.meta.object          {"json":"objects","are":"also","totally":"acceptable"}
      */
     public $p2;
     
@@ -54,7 +55,11 @@ class DummyClass
 $snap = Snap::get( 'DummyClass' );
 
 // and what can I do with it?
-echo $snap->property('p2', 'my.meta'); // will print "Other Meta Value"
+echo $snap->klass('some.property'); // will print "Foo"
+echo $snap->property('p1', 'my.meta'); // will print "Meta Value"
+echo $snap->property('p2', 'my.meta.array'); // will print Array (the value is converted from JSON format to php array)
+echo $snap->property('p2', 'my.meta.object'); // will print Array (the value is converted from JSON format to an php associative array)
+echo $snap->method('exampleFunction', 'my.super.meta'); // will print "Super Awesome Meta"
 
 // how about default values?
 echo $snap->property('p2', 'no.such.meta', 'Oh well'); // will print "Oh well"
@@ -110,6 +115,7 @@ class MyNamespace extends Snap_Wordpress_Plugin
         $arg1 = "You've been filtered!";
         return $arg1;
     }
-    
 }
+
+Snap::create('MyNamespace');
 ```
