@@ -1,7 +1,5 @@
 <?php
 
-require_once( dirname(__FILE__).'/../Snap.php' );
-
 class Snap_Wordpress_Plugin
 {
     protected $snap;

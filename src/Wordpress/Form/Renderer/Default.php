@@ -363,10 +363,84 @@ class Snap_Wordpress_Form_Renderer_Default
     
     public function renderImage( $field )
     {
-        $this->renderInput( $field, 'text' );
+        static $includedJS=false;
+        if( $field->cfg('display_image') ){
+            if( $field->getValue() ){
+                
+                $style='';
+                $h=$field->cfg('image_height');
+                $w=$field->cfg('image_width');
+                
+                if( $h ){
+                    $style.="max-height: {$h}px;";
+                }
+                if( $w ){
+                    $style.="max-width: {$w}px;";
+                }
+                ?>
+                <span class="img-ct" data-height="<?=$h?>" data-width="<?=$w?>" >
+                <img src="<?= $field->getValue() ?>" style="<?= $style ?>" />
+                </span>
+                <?php
+            }else{
+                ?>
+                <span class="img-ct"></span>
+                No Image... 
+                <?php
+            }
+            ?>
+            <br />
+            <?php
+            $this->renderInput( $field, 'hidden' );
+        }
+        else{
+            $this->renderInput( $field, 'text' );
+        }
         ?>
         <a class="snap-upload-button button">Choose Image</a>
         <?php
+        if( !$includedJS ){
+            $includedJS = true;
+            ?>
+<script type="text/javascript">
+jQuery(function($){
+    // upload buttons
+    $('.snap-upload-button').click(function(){
+        var send_to_editor = window.send_to_editor,
+            tb_remove = window.tb_remove,
+            self = this
+            ;
+            
+        window.send_to_editor = function(html){
+            var ct, src = $('img', html).attr('src');
+            $(self).prev().val( src );
+            if( (ct = $(self).prevAll('.img-ct')) ){
+                var w = ct.attr('data-width'),
+                    h = ct.attr('data-height');
+                    
+                var style = '';
+                if( w ) style+='max-width: '+w+'px;'
+                if( h ) style+='max-height: '+h+'px;'
+                    
+                ct.html('<img src="'+src+'" style="'+style+'"/>');
+            }
+            tb_remove();
+            return false;
+        }
+        
+        window.tb_remove = function(){
+            window.send_to_editor = send_to_editor;
+            window.tb_remove = tb_remove;
+            tb_remove();
+        }
+        
+        tb_show('', 'media-upload.php?type=image&TB_iframe=true');
+        
+    });
+});
+</script>
+            <?php
+        }
     }
     
     public function renderSelect( $field )

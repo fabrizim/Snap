@@ -3,9 +3,7 @@
 class Snap_Wordpress_Template
 {
     protected static $paths;
-    
     protected static $styles=array();
-    
     protected static $scripts=array();
     
     public static function registerPath( $type, $path  )

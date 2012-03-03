@@ -3,17 +3,11 @@
 class Snap_Wordpress_Form
 {
     protected $snap;
-    
     protected $fields = array();
-    
     protected $groups = array('default' => array());
-    
     protected $success = false;
-    
     protected $errors = array();
-    
     protected $formErrors = array();
-    
     protected $_processed = false;
     
     public function __construct()
