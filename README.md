@@ -1,4 +1,6 @@
-##Snap Library
+## Snap Library
+
+### Overview
 
 The Snap library is designed to "snap" on to any php code and provide
 the ability to stuff meta data into document comments for php classes.
