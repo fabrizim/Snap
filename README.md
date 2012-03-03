@@ -48,7 +48,7 @@ class DummyClass
         
     }
 }
-```
+
 
 // Now what? Let's get a Snap_Reflection object for that class
 $snap = Snap::get( 'DummyClass' );
@@ -58,6 +58,8 @@ echo $snap->property('p2', 'my.meta'); // will print "Other Meta Value"
 
 // how about default values?
 echo $snap->property('p2', 'no.such.meta', 'Oh well'); // will print "Oh well"
+
+```
     
 Well, you might be thinking, "whoopdee doo buddy, thats pretty boring",
 but if you use some imagination you can do some pretty neat things. 
