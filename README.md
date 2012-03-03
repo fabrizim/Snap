@@ -87,7 +87,7 @@ add_filter('some_filter', 'namespace_some_filter', 10 );
     
 Alright... thats okay. But how about this instead:
 
-```
+```php
 <?php
 
 class MyNamespace extends Snap_Wordpress_Plugin
