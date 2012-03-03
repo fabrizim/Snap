@@ -119,7 +119,7 @@ class Snap_Wordpress_Form_Renderer_Default
         }
         ?>
         <div class="<?= implode(' ', $classes) ?>">
-            <label class="control-label" for="<?= $field->getId() ?>"><?= $field->getLabel() ?><? if( $field->isRequired() ){ ?><span class="required-asterisk">*</span><? } ?></label>
+            <label class="control-label" for="<?= $field->getId() ?>"><?= $field->getLabel() ?><? if( $field->isRequired() ){ ?> <span class="required-asterisk">*</span><? } ?></label>
             <div class="controls">
             <? $this->renderControl( $field ) ?>
             <? if( $field->hasError() ) { ?>
@@ -157,7 +157,7 @@ class Snap_Wordpress_Form_Renderer_Default
                 name="<?= $field->getName() ?>"
                 id="<?= $field->getId() ?>"
             />
-            <span><?= $field->getLabel() ?><? if( $field->isRequired() ){ ?><span class="required-asterisk">*</span><? } ?></span>
+            <span><?= $field->getLabel() ?><? if( $field->isRequired() ){ ?> <span class="required-asterisk">*</span><? } ?></span>
             </label>
             <? if( $field->hasError() ) { ?>
             <span class="help-inline">
