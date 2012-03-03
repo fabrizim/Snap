@@ -80,11 +80,15 @@ class Snap_Wordpress_Form_Field
         return $this->lastValue == $this->value;
     }
     
+    public function isRequired()
+    {
+        return $this->cfg('validator.notEmpty', false);
+    }
+    
     public function validate()
     {
         $validators = $this->cfg('validator', array());
-        $required = $this->cfg('validator.notEmpty', false);
-        if( $this->getValue() == '' && !$required ) return true; 
+        if( $this->getValue() == '' && !$this->isRequired() ) return true; 
         foreach( $validators as $key => $message ){
             $validator = Snap_Wordpress_Form_Validator_Factory::get($key);
             $validator->setValue( $this->getValue() );
