@@ -31,7 +31,7 @@ class Snap_Wordpress_Plugin
                     add_action( 'add_meta_boxes', array( &$this, '_wp_add_meta_boxes' ) );
                 }
             }
-            if( $this->snap->method($name, 'wp.ajax', false) ){
+            if( is_admin() && $this->snap->method($name, 'wp.ajax', false) ){
                 $this->_wp_add_ajax($name);
             }
         }
@@ -71,13 +71,18 @@ class Snap_Wordpress_Plugin
         $nopriv = $this->snap->method( $method, 'wp.ajax_nopriv', false);
         $prefix = 'wp_ajax';
         
-        if( $admin || (!$admin && !$nopriv ) ){
-            add_action( $prefix.'_'.$name, array( &$this, $method ) );
-        }
+        add_action( $prefix.'_'.$name, array( &$this, $method ) );
         if( $nopriv ){
-            $action.= '_nopriv';
+            $prefix .= '_nopriv';
             add_action( $prefix.'_'.$name, array( &$this, $method ) );
         }
+    }
+    
+    protected function returnJSON( $obj )
+    {
+        header('Content-Type:application/json');
+        echo json_encode( $obj );
+        die();
     }
     
     public function _wp_add_meta_boxes()

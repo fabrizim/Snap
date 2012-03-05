@@ -22,9 +22,7 @@ class Snap_Loader
         if( isset( self::$libs[$prefix] ) ){
             if( !count( $parts ) ) $parts[] = $prefix;
             $file = self::$libs[$prefix] . DIRECTORY_SEPARATOR . implode( DIRECTORY_SEPARATOR, $parts ) . '.php';
-            if( file_exists( $file ) ){
-                require( self::$libs[$prefix] . DIRECTORY_SEPARATOR . implode( DIRECTORY_SEPARATOR, $parts ) . '.php' );
-            }
+            if( file_exists( $file ) ) require( $file );
         }
     }
 }

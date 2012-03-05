@@ -457,4 +457,16 @@ jQuery(function($){
         </select>
         <?php
     }
+    
+    public function renderTextarea( $field )
+    {
+        ?>
+        <textarea
+            class="regular-text"
+            style="width: 100%;"
+            name="<?= $field->getName() ?>"
+            id="<?= $field->getId() ?>"
+        ><?= $field->getValue() ?></textarea>
+        <?php
+    }
 }
