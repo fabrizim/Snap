@@ -119,14 +119,14 @@ class Snap_Wordpress_Form_Renderer_Default
         }
         ?>
         <div class="<?= implode(' ', $classes) ?>">
-            <label class="control-label" for="<?= $field->getId() ?>"><?= $field->getLabel() ?><? if( $field->isRequired() ){ ?> <span class="required-asterisk">*</span><? } ?></label>
+            <label class="control-label" for="<?= $field->getId() ?>"><?= $field->getLabel() ?><? if( $field->isRequired() ): ?> <span class="required-asterisk">*</span><? endif; ?></label>
             <div class="controls">
             <? $this->renderControl( $field ) ?>
-            <? if( $field->hasError() ) { ?>
+            <? if( $field->hasError() ):?>
             <span class="help-inline">
                 <?= $field->getError() ?>
             </span>
-            <? } ?>
+            <? endif; ?>
             </div>
         </div>
         <?php
@@ -157,7 +157,7 @@ class Snap_Wordpress_Form_Renderer_Default
                 name="<?= $field->getName() ?>"
                 id="<?= $field->getId() ?>"
             />
-            <span><?= $field->getLabel() ?><? if( $field->isRequired() ){ ?> <span class="required-asterisk">*</span><? } ?></span>
+            <span><?= $field->getLabel() ?><? if( $field->isRequired() ): ?> <span class="required-asterisk">*</span><? endif; ?></span>
             </label>
             <? if( $field->hasError() ) { ?>
             <span class="help-inline">
@@ -404,6 +404,7 @@ class Snap_Wordpress_Form_Renderer_Default
             ?>
 <script type="text/javascript">
 jQuery(function($){
+    
     // upload buttons
     $('.snap-upload-button').click(function(){
         var send_to_editor = window.send_to_editor,
@@ -433,8 +434,7 @@ jQuery(function($){
             window.tb_remove = tb_remove;
             tb_remove();
         }
-        
-        tb_show('', 'media-upload.php?type=image&TB_iframe=true');
+        tb_show('Choose Image', 'media-upload.php?type=image&TB_iframe=true');
         
     });
 });

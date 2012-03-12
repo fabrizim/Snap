@@ -38,6 +38,13 @@ class Snap {
         }
         return self::$objects[$className];
     }
+    /**
+     * Alias for singleton
+     */
+    public static function inst( $className )
+    {
+        return self::singleton( $className );
+    }
 }
 
 Snap_Loader::register( 'Snap', SNAP_DIR );

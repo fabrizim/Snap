@@ -20,6 +20,8 @@ class Snap_Wordpress_Template
             if ( !$template_name )
                 continue;
             
+            if( !preg_match('#\.php$#', $template_name ) ) $template_name .= '.php';
+            
             if( ($located = locate_template( $type.'/'.$template_name, $load, $require_once )) ){
                 break;
             }
