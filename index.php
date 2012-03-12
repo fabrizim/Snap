@@ -8,3 +8,4 @@ Version: 1.0
 Author URI: http://owlwatch.com/
 */
 require(dirname(__FILE__).'/src/Snap.php');
+Snap::create('Snap_Wordpress_Init');
