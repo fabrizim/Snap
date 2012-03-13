@@ -366,8 +366,9 @@ class Snap_Wordpress_Form_Renderer_Default
         static $includedJS=false;
         
         $url_params = array(
-            'post_id='.get_the_ID(),
+            //'post_id='.get_the_ID(),
             'type=image',
+            'send=1',
             'TB_iframe=1'
         );
         
@@ -380,24 +381,27 @@ class Snap_Wordpress_Form_Renderer_Default
         $url = 'media-upload.php?'.implode('&#038;', $url_params);
         
         if( $field->cfg('display_image') ){
-            $style='';
-            $h=$field->cfg('image_height');
-            $w=$field->cfg('image_width');
+            $style='max-width: 100%;';
+            $h = $field->cfg('image_height');
+            $size = $field->cfg('image_size');
             
             if( $h ){
                 $style.="max-height: {$h}px;";
             }
-            if( $w ){
-                $style.="max-width: {$w}px;";
-            }
             ?>
-            <span class="img-ct" data-height="<?=$h?>" data-width="<?=$w?>" >
+            <span class="img-ct" data-height="<?=$h?>"<? if( $size ){ ?> data-size="<?= $size ?>"<? } ?>>
             <?php
             if( $field->getValue() ){
                 
                 $val = $field->getValue();
                 if( $use_id ){
-                    $val = wp_get_attachment_url( $val );
+                    if( ($size = $field->cfg('image_size')) ){
+                        $size = wp_get_attachment_image_src( $val, $size );
+                        $val = $src[0];
+                    }
+                    else{
+                        $val = wp_get_attachment_url( $val );
+                    }
                 }
                 ?>
                 <img src="<?= $val ?>" style="<?= $style ?>" />
@@ -424,61 +428,8 @@ class Snap_Wordpress_Form_Renderer_Default
         <?php
         if( !$includedJS ){
             $includedJS = true;
-            ?>
-<script type="text/javascript">
-jQuery(function($){
-    
-    // upload buttons
-    $('.snap-upload-button').click(function(){
-        var send_to_editor = window.send_to_editor,
-            tb_remove = window.tb_remove,
-            self = this
-            ;
-            
-        window.send_to_editor = function(arg){
-            $(self).attr('data-use_id') ? save_json(arg) : save_html(arg);
-            tb_remove();
-            return false;
-        };
-        
-        window.tb_remove = function(){
-            window.send_to_editor = send_to_editor;
-            window.tb_remove = tb_remove;
-            tb_remove();
-        }
-        
-        tb_show('Choose Image', $(this).attr('data-url'));
-        
-        function update_image( src )
-        {
-            if( (ct = $(self).prevAll('.img-ct')) ){
-                var w = ct.attr('data-width'),
-                    h = ct.attr('data-height');
-                    
-                var style = '';
-                if( w ) style+='max-width: '+w+'px;'
-                if( h ) style+='max-height: '+h+'px;'
-                    
-                ct.html('<img src="'+src+'" style="'+style+'"/>');
-            }
-        }
-        
-        function save_html(html){
-            var ct, src = $('img', html).attr('src');
-            $(self).prevAll('input').val( src );
-            update_image( src );
-        }
-        
-        function save_json(data)
-        {
-            $(self).prev().val( data.id );
-            update_image( data.url );
-        }
-        
-    });
-});
-</script>
-            <?php
+            wp_enqueue_script('media-upload');
+            wp_enqueue_script('snap-upload');
         }
     }
     
