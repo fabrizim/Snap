@@ -3,7 +3,12 @@
 class Snap_Wordpress_Form_Renderer_Default
 {
     
-    protected $last_field;    
+    protected $last_field;
+    
+    protected function implodeUnique( $classes )
+    {
+        return implode(' ', array_unique( $classes ) );
+    }
     
     public function renderOpenGroup( $form )
     {
@@ -19,10 +24,38 @@ class Snap_Wordpress_Form_Renderer_Default
         <?php
     }
     
+    public function getFormClasses()
+    {
+        return array('form-horizontal');
+    }
+    
+    public function getFieldClasses( $field )
+    {
+        return array(
+            'clearfix',
+            'control-group',
+            'control-'.$field->getType()
+        );
+    }
+    
+    public function getButtonClasses()
+    {
+        return array('btn');
+    }
+    
+    public function getControlClasses( $field, $type )
+    {
+        $classes = array('snap-'.$type);
+        if( $field->hasError() ) $classes[] = 'error';
+        return $classes;
+    }
+    
     public function renderOpenForm( $action, $method="post" )
     {
+        $classes = $this->getFormClasses();
+        apply_filters('snap_form_classes', $classes, $this);
         ?>
-        <form action="<?= $action ?>" method="<?= $method ?>" class="form-horizontal">
+        <form action="<?= $action ?>" method="<?= $method ?>" class="<?= $this->implodeUnique($classes) ?>">
         <?php
     }
     
@@ -52,12 +85,11 @@ class Snap_Wordpress_Form_Renderer_Default
             $options = array_merge(array(
                 'tag' => 'input',
                 'text' => 'Submit',
-                'classes' => array('btn btn-primary'),
                 'id' => 'snap_button_'.(++$id)
             ), $button);
             
             $attrs=array();
-            $attrs['class'] = implode(' ',$options['classes']);
+            $attrs['class'] = $this->implodeUnique($this->getButtonClasses( $button ) );
 
             switch( $options['tag'] ){
                 case 'input':
@@ -94,6 +126,17 @@ class Snap_Wordpress_Form_Renderer_Default
         <?php
     }
     
+    public function renderInlineError( $field )
+    {
+        if( $field->hasError() ):
+            ?>
+            <span class="help-inline">
+                <?= $field->getError() ?>
+            </span>
+            <?php
+        endif;
+    }
+    
     public function renderField( $field )
     {
         $type = $field->getType();
@@ -109,24 +152,16 @@ class Snap_Wordpress_Form_Renderer_Default
     
     public function renderFieldDefault( $field )
     {
-        $classes = array(
-            'clearfix',
-            'control-group',
-            'control-'.$field->getType()
-        );
+        $classes = $this->getFieldClasses( $field );
         if( $field->hasError() ){
             $classes[] = 'error';
         }
         ?>
-        <div class="<?= implode(' ', $classes) ?>">
+        <div class="<?= $this->implodeUnique($classes) ?>">
             <label class="control-label" for="<?= $field->getId() ?>"><?= $field->getLabel() ?><? if( $field->isRequired() ): ?> <span class="required-asterisk">*</span><? endif; ?></label>
             <div class="controls">
             <? $this->renderControl( $field ) ?>
-            <? if( $field->hasError() ):?>
-            <span class="help-inline">
-                <?= $field->getError() ?>
-            </span>
-            <? endif; ?>
+            <? $this->renderInlineError( $field ) ?>
             </div>
         </div>
         <?php
@@ -134,18 +169,14 @@ class Snap_Wordpress_Form_Renderer_Default
     
     public function renderFieldCheckbox( $field )
     {
-        $classes = array(
-            'clearfix',
-            'control-group',
-            'control-'.$field->getType()
-        );
+       $classes = $this->getFieldClasses( $field );
         if( $field->hasError() ){
             $classes[] = 'error';
         }
         $inputValue = $field->cfg('inputValue', 1);
         $checked = $inputValue == $field->getValue();
         ?>
-        <div class="<?= implode(' ', $classes ) ?>">
+        <div class="<?= $this->implodeUnique( $classes ) ?>">
             <div class="controls">
             <label for="<?= $field->getId() ?>" class="checkbox">
             
@@ -159,11 +190,7 @@ class Snap_Wordpress_Form_Renderer_Default
             />
             <span><?= $field->getLabel() ?><? if( $field->isRequired() ): ?> <span class="required-asterisk">*</span><? endif; ?></span>
             </label>
-            <? if( $field->hasError() ) { ?>
-            <span class="help-inline">
-                <?= $field->getError() ?>
-            </span>
-            <? } ?>
+            <? $this->renderInlineError( $field ) ?>
             </div>
         </div>
         <?php
@@ -189,14 +216,12 @@ class Snap_Wordpress_Form_Renderer_Default
     
     public function renderCheckbox( $field )
     {
-        if( $field->hasError() ){
-            $classes[] = 'error';
-        }
+        $classes = $this->getControlClasses( $field, 'checkbox' );
         $inputValue = $field->cfg('inputValue', 1);
         $checked = $inputValue == $field->getValue();
         ?>
         <input
-            class="checkbox"
+            class="<?= $this->implodeUnique( $classes ) ?>"
             type="checkbox"
             value="<?= $inputValue ?>"
             <? if( $checked ){ ?>checked<? } ?>
@@ -209,9 +234,10 @@ class Snap_Wordpress_Form_Renderer_Default
     public function renderInput( $field, $type=null )
     {
         if( !$type ) $type = $field->getType();
+        $classes = $this->getControlClasses( $field, $type );
         ?>
         <input
-            class="regular-text snap-<?= $field->getType() ?>"
+            class="<?= $this->implodeUnique($classes) ?>"
             type="<?= $type ?>"
             value="<?= esc_attr($field->getValue()) ?>"
             name="<?= $field->getName() ?>"
@@ -368,7 +394,6 @@ class Snap_Wordpress_Form_Renderer_Default
         $url_params = array(
             //'post_id='.get_the_ID(),
             'type=image',
-            'send=1',
             'TB_iframe=1'
         );
         
@@ -436,8 +461,10 @@ class Snap_Wordpress_Form_Renderer_Default
     public function renderSelect( $field )
     {
         $options = $field->getOptions();
+        $classes = $this->getControlClasses( $field, 'select' );
         ?>
         <select
+            class="<?= $this->implodeUnique($classes) ?>"
             name="<?= $field->getName() ?>"
             id="<?= $field->getId() ?>"
         >
@@ -450,9 +477,10 @@ class Snap_Wordpress_Form_Renderer_Default
     
     public function renderTextarea( $field )
     {
+        $classes = $this->getControlClasses( $field, 'textarea' );
         ?>
         <textarea
-            class="regular-text"
+            class="<?= $this->implodeUnique( $classes ) ?>"
             style="width: 100%;"
             name="<?= $field->getName() ?>"
             id="<?= $field->getId() ?>"

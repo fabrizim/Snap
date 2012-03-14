@@ -37,7 +37,7 @@
     function save_html(html, self){
         var ct, src = $('img', html).attr('src');
         self.prevAll('input').val( src );
-        update_image( src );
+        update_image( src, self );
     }
     
     function save_json(data, self)

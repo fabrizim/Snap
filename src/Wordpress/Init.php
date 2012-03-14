@@ -19,7 +19,7 @@ class Snap_Wordpress_Init extends Snap_Wordpress_Plugin
         // check referrer
         $referer =  @$_SERVER['HTTP_REFERER'];
         
-        if( strpos($referer, 'json=1') == -1 ) return $html;
+        if( strpos($referer, 'json=1') === false ) return $html;
         
         $sizes = array();
         foreach( get_intermediate_image_sizes() as $size ){
