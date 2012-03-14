@@ -14,7 +14,7 @@ in any library, but I just don't have the time for that right now.
 To use snap, all you need to do is include the library file and then
 reap the benefits.
 
-Check this out...
+Check this out....
 
 ```php
 <?php
