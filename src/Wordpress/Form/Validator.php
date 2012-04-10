@@ -3,14 +3,19 @@
 class Snap_Wordpress_Form_Validator
 {
     protected $error;
-    
     protected $message;
-    
     protected $value;
+    protected $field;
     
     public function __construct()
     {
         
+    }
+    
+    public function setField( $field )
+    {
+        $this->field = $field;
+        $this->value = $field->getValue();
     }
     
     public function setValue( $value )

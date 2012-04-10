@@ -5,17 +5,14 @@ class Snap_Wordpress_Form_Field
     
     static $id=0;
     
+    
     protected $name;
-    
     protected $value;
-    
     protected $lastValue;
-    
     protected $config;
-    
     protected $form;
-    
     protected $errors=array();
+    protected $options;
     
     public function __construct( $name, $config = false )
     {
@@ -23,6 +20,9 @@ class Snap_Wordpress_Form_Field
         $this->id = self::_id();
         $this->config = new Snap_Registry();
         $this->config->import( $config );
+        if( ($options=$this->cfg('options', false ) ) ){
+            $this->options = $options;
+        }
     }
     
     protected static function _id()
@@ -47,6 +47,11 @@ class Snap_Wordpress_Form_Field
     public function setForm( $form )
     {
         $this->form = $form;
+    }
+    
+    public function getForm()
+    {
+        return $this->form;
     }
     
     public function getType()
@@ -91,7 +96,7 @@ class Snap_Wordpress_Form_Field
         if( $this->getValue() == '' && !$this->isRequired() ) return true; 
         foreach( $validators as $key => $message ){
             $validator = Snap_Wordpress_Form_Validator_Factory::get($key);
-            $validator->setValue( $this->getValue() );
+            $validator->setField( $this );
             if( is_string( $message ) ){
                 $validator->setMessage( $message );
             }
@@ -100,6 +105,18 @@ class Snap_Wordpress_Form_Field
             }
         }
         return !count( $this->errors );
+    }
+    
+    public function getOptions()
+    {
+        if( isset( $this->options ) ) return $this->options;
+        if( !$this->form ){
+            $this->options = array();
+        }
+        else{
+            $this->options = $this->form->getOptions( $this->getName() );
+        }
+        return $this->options;
     }
     
     public function getErrors()

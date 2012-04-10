@@ -32,6 +32,10 @@ class Snap_Wordpress_Form_Renderer_Foundation extends Snap_Wordpress_Form_Render
             case 'select':
                 $classes[] = 'input-text';
                 break;
+            case 'radios':
+            case 'checkbox':
+                $classes[] = 'custom';
+                break;
         }
         return $classes;
     }
@@ -40,7 +44,7 @@ class Snap_Wordpress_Form_Renderer_Foundation extends Snap_Wordpress_Form_Render
     {
         return array(
             'button',
-            'nice',
+            'blue',
             'radius',
             'medium'
         );
@@ -83,7 +87,8 @@ class Snap_Wordpress_Form_Renderer_Foundation extends Snap_Wordpress_Form_Render
             name="<?= $field->getName() ?>"
             id="<?= $field->getId() ?>"
         >
-            <?php foreach( $options as $value=> $label ){ ?>
+            <?php foreach( $options as $value=> $label ){
+                ?>
             <option value="<?= esc_attr( $value ) ?>" <? if( $value == $field->getValue() ){ ?>selected<? } ?>><?= $label ?></option>
             <?php } ?>
         </select>

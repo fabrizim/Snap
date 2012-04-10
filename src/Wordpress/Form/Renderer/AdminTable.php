@@ -8,7 +8,44 @@ class Snap_Wordpress_Form_Renderer_AdminTable extends Snap_Wordpress_Form_Render
         ?>
         <table class="form-table">
         <?php
-    }    
+    }
+    
+    public function getFieldClasses( $field )
+    {
+        
+        $classes = array(
+            'form-field',
+            'clearfix',
+            'form-field-'.$field->getType()
+        );
+        if( $field->hasError() ){
+            $classes[] = 'error';
+        }
+        return $classes;
+    }
+    
+    public function getControlClasses( $field, $type )
+    {
+        $classes = parent::getControlClasses( $field, $type );
+        switch( $type ){
+            case 'textarea':
+            case 'text':
+            case 'password':
+            case 'file':
+            case 'select':
+                $classes[] = 'regular-text';
+                break;
+        }
+        return $classes;
+    }
+    
+    public function getButtonClasses( $button )
+    {
+        return array(
+            'button',
+            'button-primary'
+        );
+    }
     
     
     public function renderFieldDefault( $field )

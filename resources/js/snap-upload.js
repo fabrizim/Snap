@@ -56,6 +56,7 @@
     
     function snap_send_to_editor(arg, self)
     {
+        console.log(arguments);
         self.attr('data-use_id') ? save_json(arg, self) : save_html(arg, self);
         tb_remove();
         return false;

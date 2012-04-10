@@ -53,7 +53,7 @@ class Snap_Registry
     {
         $inferred = $value;
         if( gettype($value) == 'string' ){
-            $inferred = json_decode($value);
+            $inferred = json_decode($value, true);
             if( $inferred === NULL ){
                 $inferred = $value; 
             }

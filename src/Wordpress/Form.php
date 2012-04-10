@@ -63,10 +63,10 @@ class Snap_Wordpress_Form
         return $this;
     }
     
-    public function updateMeta( $post_id )
+    public function updateMeta( $post_id, $except=array() )
     {
         foreach( $this->fields as &$field ){
-            update_post_meta( $post_id, $field->getName(), $field->getValue() );
+            if( !in_array( $field->getName(), $except ) ) update_post_meta( $post_id, $field->getName(), $field->getValue() );
         }
     }
     
@@ -84,14 +84,19 @@ class Snap_Wordpress_Form
     {
         $this->success = true;
         $this->setValues( $from, $all );
+        $this->validate();
+        $this->_processed = true;
+        return $this->success;
+    }
+    
+    public function validate()
+    {
         foreach( $this->fields as $name => &$field ){
             if( !$field->validate() ){
                 $this->success = false;
-                $this->errors = $this->errors + $field->getErrors();
+                $this->errors[$name] = $field->getErrors();
             }
         }
-        $this->_processed = true;
-        return $this->success;
     }
     
     public function processed()
@@ -124,6 +129,14 @@ class Snap_Wordpress_Form
             if( $all || @$source[$name] ){
                 $field->setValue( @$source[$name], $source );
             }
+        }
+    }
+    
+    public function clear()
+    {
+        foreach( $this->fields as $name => &$field )
+        {
+            $field->setValue('');
         }
     }
     
@@ -165,6 +178,7 @@ class Snap_Wordpress_Form
     }
     
     public function getOptions( $name ){
-        return array();
+        $options = $this->field( $name )->getCfg( 'options', array() );
+        return is_array($options) ? $options : array();
     }
 }

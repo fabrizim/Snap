@@ -49,4 +49,14 @@ win.send_to_editor(<?php echo json_encode($return_object); ?>);
         <?php
         exit;
     }
+    
+    /**
+     * @wp.filter
+     */
+    function get_media_item_args($args=array())
+    {
+        
+        if( @$_GET['snap'] ) $args['send'] = true;
+        return $args;
+    }
 }

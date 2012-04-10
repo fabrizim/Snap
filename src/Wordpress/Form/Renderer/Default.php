@@ -175,12 +175,11 @@ class Snap_Wordpress_Form_Renderer_Default
         }
         $inputValue = $field->cfg('inputValue', 1);
         $checked = $inputValue == $field->getValue();
+        $label = $field->cfg('boxlabel', $field->getLabel());
         ?>
         <div class="<?= $this->implodeUnique( $classes ) ?>">
             <div class="controls">
-            <label for="<?= $field->getId() ?>" class="checkbox">
-            
-            <input
+            <label class="checkbox"><input
                 class="checkbox"
                 type="checkbox"
                 value="<?= $inputValue ?>"
@@ -188,7 +187,7 @@ class Snap_Wordpress_Form_Renderer_Default
                 name="<?= $field->getName() ?>"
                 id="<?= $field->getId() ?>"
             />
-            <span><?= $field->getLabel() ?><? if( $field->isRequired() ): ?> <span class="required-asterisk">*</span><? endif; ?></span>
+            <?= $label ?><? if( $field->isRequired() ): ?> <span class="required-asterisk">*</span><? endif; ?>
             </label>
             <? $this->renderInlineError( $field ) ?>
             </div>
@@ -392,18 +391,18 @@ class Snap_Wordpress_Form_Renderer_Default
         static $includedJS=false;
         
         $url_params = array(
-            //'post_id='.get_the_ID(),
             'type=image',
+            'snap=1',
             'TB_iframe=1'
         );
         
         $use_id = $field->cfg('use_id');
         
         if( $use_id ){
-            $url_params[] = 'json=1';
+            array_unshift($url_params, 'json=1');
         }
         
-        $url = 'media-upload.php?'.implode('&#038;', $url_params);
+        $url = 'media-upload.php?'.implode('&', $url_params);
         
         if( $field->cfg('display_image') ){
             $style='max-width: 100%;';
@@ -472,6 +471,35 @@ class Snap_Wordpress_Form_Renderer_Default
             <option value="<?= esc_attr( $value ) ?>" <? if( $value == $field->getValue() ){ ?>selected<? } ?>><?= $label ?></option>
             <?php } ?>
         </select>
+        <?php
+    }
+    
+    public function renderRadios( $field )
+    {
+        $options = $field->getOptions();
+        $classes = $this->getControlClasses( $field, 'radios' );
+        $value = $field->getValue();
+        ?>
+        <ul class="<?= $this->implodeUnique( $classes ) ?>">
+        <?php
+        foreach( $options as $v => $l ){
+            ?>
+        <li>
+            <label>
+                <input
+                    name="<?= $field->getName() ?>"
+                    type="radio"
+                    class="<?= $this->implodeUnique( $classes ) ?>"
+                    value="<?= esc_attr( $v ) ?>"
+                    <? if( $value == $v ): ?>checked<? endif; ?>
+                />
+                <span><?= $l ?></span>
+            </label>
+        </li>
+            <?php
+        }
+        ?>
+        </ul>
         <?php
     }
     
