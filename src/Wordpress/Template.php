@@ -12,6 +12,34 @@ class Snap_Wordpress_Template
         array_unshift( self::$paths[$type], $path );
     }
     
+    public static function inc( $type, $template_names, $waterfall = true )
+    {
+        foreach ( (array) $template_names as $template_name ) {
+            
+            if ( !$template_name )
+                continue;
+            
+            if( !preg_match('#\.php$#', $template_name ) ) $template_name .= '.php';
+            
+            if( ($located = locate_template( $type.'/'.$template_name, true, true )) ){
+                continue;
+            }
+            
+            // else check our registry
+            if( !isset( self::$paths[$type] ) )
+                continue;
+            
+            foreach( self::$paths[$type] as $path ){
+                if( file_exists( $path .'/'. $template_name ) ){
+                    $located = $path .'/'. $template_name;
+                    load_template( $located, true );
+                    break;
+                }
+            }
+        }
+        return;
+    }
+    
     public static function load( $type, $template_names, $load = true, $require_once = true )
     {
         $located = '';

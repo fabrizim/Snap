@@ -5,7 +5,6 @@ class Snap_Wordpress_Form_Field
     
     static $id=0;
     
-    
     protected $name;
     protected $value;
     protected $lastValue;
@@ -80,6 +79,11 @@ class Snap_Wordpress_Form_Field
         return $this->value;
     }
     
+    public function getValueFormatted()
+    {
+        return $this->format()->getValue();
+    }
+    
     public function isModified()
     {
         return $this->lastValue == $this->value;
@@ -105,6 +109,28 @@ class Snap_Wordpress_Form_Field
             }
         }
         return !count( $this->errors );
+    }
+    
+    public function filter()
+    {
+        $validators = $this->cfg('validator', array());
+        foreach( $validators as $key => $message ){
+            $validator = Snap_Wordpress_Form_Validator_Factory::get($key);
+            $validator->setField( $this );
+            $this->value = $validator->filter();
+        }
+        return $this;
+    }
+    
+    public function format()
+    {
+        $validators = $this->cfg('validator', array());
+        foreach( $validators as $key => $message ){
+            $validator = Snap_Wordpress_Form_Validator_Factory::get($key);
+            $validator->setField( $this );
+            $this->value = $validator->format();
+        }
+        return $this;
     }
     
     public function getOptions()

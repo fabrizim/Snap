@@ -43,10 +43,11 @@ class Snap_Wordpress_Form_Renderer_Foundation extends Snap_Wordpress_Form_Render
     public function getButtonClasses( $button )
     {
         return array(
+            'nice',
             'button',
             'blue',
             'radius',
-            'medium'
+            'large'
         );
     }
     
@@ -61,22 +62,6 @@ class Snap_Wordpress_Form_Renderer_Foundation extends Snap_Wordpress_Form_Render
         endif;
     }
     
-    public function renderFieldDefault( $field )
-    {
-        $classes = $this->getFieldClasses( $field );
-        if( $field->hasError() ){
-            $classes[] = 'error';
-        }
-        ?>
-        <div class="<?= $this->implodeUnique($classes) ?>">
-            <label class="control-label" for="<?= $field->getId() ?>"><?= $field->getLabel() ?><? if( $field->isRequired() ): ?> <span class="required-asterisk">*</span><? endif; ?></label>
-            <div class="controls">
-            <? $this->renderControl( $field ) ?>
-            <? $this->renderInlineError( $field ) ?>
-            </div>
-        </div>
-        <?php
-    }
     
     public function renderSelect( $field )
     {

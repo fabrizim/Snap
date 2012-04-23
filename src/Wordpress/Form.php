@@ -40,6 +40,12 @@ class Snap_Wordpress_Form
         $this->groups[ $group ][] = $name;
     }
     
+    public function removeField( $name )
+    {
+        if( isset( $this->fields[$name]) ) unset( $this->fields[$name] );
+        return $this;
+    }
+    
     public function addFormError( $error )
     {
         $this->formErrors[] = $error;
@@ -66,7 +72,8 @@ class Snap_Wordpress_Form
     public function updateMeta( $post_id, $except=array() )
     {
         foreach( $this->fields as &$field ){
-            if( !in_array( $field->getName(), $except ) ) update_post_meta( $post_id, $field->getName(), $field->getValue() );
+            if( !in_array( $field->getName(), $except ) )
+                update_post_meta( $post_id, $field->getName(), $field->filter()->getValue() );
         }
     }
     
@@ -126,7 +133,7 @@ class Snap_Wordpress_Form
     public function setValues( $source = array(), $all=false )
     {
         foreach( $this->fields as $name => &$field ){
-            if( $all || @$source[$name] ){
+            if( $all || isset($source[$name]) ){
                 $field->setValue( @$source[$name], $source );
             }
         }

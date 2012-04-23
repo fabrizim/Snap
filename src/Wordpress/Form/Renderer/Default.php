@@ -157,13 +157,20 @@ class Snap_Wordpress_Form_Renderer_Default
             $classes[] = 'error';
         }
         ?>
-        <div class="<?= $this->implodeUnique($classes) ?>">
-            <label class="control-label" for="<?= $field->getId() ?>"><?= $field->getLabel() ?><? if( $field->isRequired() ): ?> <span class="required-asterisk">*</span><? endif; ?></label>
+        <div class="<?= $this->implodeUnique($classes) ?>" id="form-field-<?= $field->getName() ?>">
+            <? $this->renderLabel( $field ) ?>
             <div class="controls">
-            <? $this->renderControl( $field ) ?>
-            <? $this->renderInlineError( $field ) ?>
+                <? $this->renderControl( $field ) ?>
+                <? $this->renderInlineError( $field ) ?>
             </div>
         </div>
+        <?php
+    }
+    
+    public function renderLabel( $field )
+    {
+        ?>
+        <label class="control-label" for="<?= $field->getId() ?>"><?= $field->getLabel() ?><? if( $field->isRequired() ): ?> <span class="required-asterisk">*</span><? endif; ?></label>
         <?php
     }
     
@@ -177,7 +184,7 @@ class Snap_Wordpress_Form_Renderer_Default
         $checked = $inputValue == $field->getValue();
         $label = $field->cfg('boxlabel', $field->getLabel());
         ?>
-        <div class="<?= $this->implodeUnique( $classes ) ?>">
+        <div class="<?= $this->implodeUnique( $classes ) ?>" id="form-field-<?= $field->getName() ?>">
             <div class="controls">
             <label class="checkbox"><input
                 class="checkbox"
@@ -238,7 +245,7 @@ class Snap_Wordpress_Form_Renderer_Default
         <input
             class="<?= $this->implodeUnique($classes) ?>"
             type="<?= $type ?>"
-            value="<?= esc_attr($field->getValue()) ?>"
+            value="<?= esc_attr($field->format()->getValue()) ?>"
             name="<?= $field->getName() ?>"
             id="<?= $field->getId() ?>"
          />

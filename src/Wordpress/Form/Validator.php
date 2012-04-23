@@ -37,4 +37,14 @@ class Snap_Wordpress_Form_Validator
     {
         $this->message = $message;
     }
+    
+    public function filter()
+    {
+        return $this->value;
+    }
+    
+    public function format()
+    {
+        return $this->value;
+    }
 }
