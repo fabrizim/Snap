@@ -11,4 +11,9 @@ class Snap_Wordpress_Form_Validator_NotEmpty extends Snap_Wordpress_Form_Validat
         return $valid;
     }
     
+    public function getValidationClasses()
+    {
+        return array('required');
+    }
+    
 }

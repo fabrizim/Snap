@@ -12,6 +12,11 @@ class Snap_Wordpress_Form_Validator
         
     }
     
+    public function getValidationClasses()
+    {
+        return array();
+    }
+    
     public function setField( $field )
     {
         $this->field = $field;

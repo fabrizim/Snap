@@ -77,4 +77,9 @@ class Snap_Wordpress_Form_Validator_Email extends Snap_Wordpress_Form_Validator
         }
         return $isValid;
     }
+    
+    public function getValidationClasses()
+    {
+        return array('email');
+    }
 }
