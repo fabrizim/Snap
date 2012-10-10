@@ -57,6 +57,8 @@ class Snap_Wordpress_Form_Renderer_AdminTable extends Snap_Wordpress_Form_Render
             </th>
             <td>
                 <? $this->renderControl( $field ) ?>
+                <? $this->renderInlineError( $field ) ?>
+                <? $this->renderDescription( $field ) ?>
             </td>
         </div>
         <?php
@@ -72,6 +74,8 @@ class Snap_Wordpress_Form_Renderer_AdminTable extends Snap_Wordpress_Form_Render
                 <label for="<?= $field->getId() ?>">
                     <? $this->renderControl( $field ) ?>
                     <span><?= $field->getLabel() ?></span>
+                    <? $this->renderInlineError( $field ) ?>
+                    <? $this->renderDescription( $field ) ?>
                 </label>
             </td>
         </div>
@@ -83,14 +87,17 @@ class Snap_Wordpress_Form_Renderer_AdminTable extends Snap_Wordpress_Form_Render
         if( !$field->cfg('hide_label', true) ){
             ?>
             <tr valign="top">
-                <th colspan="2"><span style="font-size: 1.2em; font-weight: bold;"><?= $field->getLabel() ?></span></th>
+                <th colspan="2"><span><?= $field->getLabel() ?></span></th>
             </tr>
             <?php
         }
         ?>
         <tr valign="top">
             <td colspan="2">
+                <? $this->renderDescription( $field ) ?>
+                <? $this->renderInlineError( $field ) ?>
                 <? $this->renderControl( $field ) ?>
+                
             </td>
         </div>
         <?php

@@ -14,6 +14,7 @@ class Snap_Wordpress_Form
     {
         $this->snap = Snap::get( $this );
         $this->initFields();
+        do_action('snap_form_init', $this);
     }
     
     protected function initFields()

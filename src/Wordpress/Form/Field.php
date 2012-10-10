@@ -68,6 +68,11 @@ class Snap_Wordpress_Form_Field
         return $this->config->get('label', $this->name);
     }
     
+    public function getDescription()
+    {
+        return $this->config->get('description', '');
+    }
+    
     public function setValue( $value, $source=array() )
     {
         if( isset($this->value) ) $this->lastValue = $this->value;
@@ -135,14 +140,14 @@ class Snap_Wordpress_Form_Field
     
     public function getOptions()
     {
-        if( isset( $this->options ) ) return $this->options;
+        if( isset( $this->options ) ) return apply_filters('snap_form_field_options', $this->options, $this);
         if( !$this->form ){
             $this->options = array();
         }
         else{
             $this->options = $this->form->getOptions( $this->getName() );
         }
-        return $this->options;
+        return apply_filters('snap_form_field_options', $this->options, $this);
     }
     
     public function getErrors()

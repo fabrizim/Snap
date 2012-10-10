@@ -162,6 +162,7 @@ class Snap_Wordpress_Form_Renderer_Default
             <div class="controls">
                 <? $this->renderControl( $field ) ?>
                 <? $this->renderInlineError( $field ) ?>
+                <? $this->renderDescription( $field ) ?>
             </div>
         </div>
         <?php
@@ -169,9 +170,19 @@ class Snap_Wordpress_Form_Renderer_Default
     
     public function renderLabel( $field )
     {
+        if( $field->cfg('hide_label') ) return;
         ?>
         <label class="control-label" for="<?= $field->getId() ?>"><?= $field->getLabel() ?><? if( $field->isRequired() ): ?> <span class="required-asterisk">*</span><? endif; ?></label>
         <?php
+    }
+    
+    public function renderDescription( $field )
+    {
+        $description = $field->getDescription();
+        if( !$description ) return;
+        ?>
+        <div><span class="description"><?= $description ?></span></div>
+        <?
     }
     
     public function renderFieldCheckbox( $field )
@@ -197,6 +208,7 @@ class Snap_Wordpress_Form_Renderer_Default
             <?= $label ?><? if( $field->isRequired() ): ?> <span class="required-asterisk">*</span><? endif; ?>
             </label>
             <? $this->renderInlineError( $field ) ?>
+            <? $this->renderDescription( $field ) ?>
             </div>
         </div>
         <?php
@@ -307,16 +319,19 @@ class Snap_Wordpress_Form_Renderer_Default
     public function renderTime( $field )
     {
         $value = $field->getValue();
+        
         $tfid = $field->getId().'_timefield';
         
         $h = '12';
         $m = '00';
+        $s = '00';
         $a = 'AM';
         
-        if( $value && preg_match( '#(\d{2})\:(\d{2})\s(AM|PM)#', $value, $matches ) ){
+        if( $value && preg_match( '#(\d{2})\:(\d{2})(\:(\d{2}))?\s(AM|PM)#', $value, $matches ) ){
             $h = $matches[1];
             $m = $matches[2];
-            $a = $matches[3];
+            if( $matches[3] ) $s = $matches[4];
+            $a = $matches[5];
         }
         
         ?>
@@ -341,7 +356,19 @@ class Snap_Wordpress_Form_Renderer_Default
                 name="<? $field->getName().'_minute' ?>"
                 
             >
-                <?php for( $i=0; $i<60; $i+=15) {
+                <?php for( $i=0; $i<60; $i+=1) {
+                    $v = sprintf('%02d', $i);
+                    ?>
+                <option <? if($m == $v ){?>selected<? } ?>><?= $v ?></option>
+                <?php } ?>
+            </select>
+            
+            <select
+                id="<?= $field->getId() ?>"
+                name="<? $field->getName().'_second' ?>"
+                
+            >
+                <?php for( $i=0; $i<60; $i+=1) {
                     $v = sprintf('%02d', $i);
                     ?>
                 <option <? if($m == $v ){?>selected<? } ?>><?= $v ?></option>
@@ -371,9 +398,10 @@ class Snap_Wordpress_Form_Renderer_Default
                         o+=$(e).find('option:selected').val()
                         switch(i){
                             case 0:
+                            case 1:
                                 o+=':';
                                 break;
-                            case 1:
+                            case 2:
                                 o+=' ';
                                 break;
                         }

@@ -2,6 +2,7 @@
 
 class Snap_Wordpress_Form_Field_Select extends Snap_Wordpress_Form_Field
 {
+    /*
     protected $options;
     
     public function getOptions()
@@ -13,4 +14,5 @@ class Snap_Wordpress_Form_Field_Select extends Snap_Wordpress_Form_Field
         $this->options = $this->form->getOptions( $this->getName() );
         return $this->options;
     }
+    */
 }
