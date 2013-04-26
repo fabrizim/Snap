@@ -45,20 +45,28 @@ class Snap_Wordpress_Plugin
         $args = $this->snap->method( $name, 'wp.args', $this->snap->method( $name, 'snap.arguments', 1 ) );
         $callback = array( &$this, $name );
         
-        $arguments = array( is_string( $_name ) ? $_name : $name, $callback );
+        $arguments = array();
         
-        switch( $type ){
-            case 'filter':
-            case 'action':
-                $arguments[] = $priority;
-                $arguments[] = $args;
-                break;
+        if( is_array( $_name ) ) foreach( $_name as $n )
+            $arguments[] = array( $n, $callback );
             
-            default:
-                break;
-        }
+        else
+            $arguments[] = array( is_string( $_name ) ? $_name : $name, $callback );
         
-        return call_user_func_array( $fn, $arguments );
+        foreach( $arguments as $a ){
+            switch( $type ){
+                case 'filter':
+                case 'action':
+                    $a[] = $priority;
+                    $a[] = $args;
+                    break;
+                
+                default:
+                    break;
+            }
+            
+            call_user_func_array( $fn, $a );
+        }
         
     }
     
