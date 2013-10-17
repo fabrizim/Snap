@@ -186,7 +186,7 @@ class Snap_Wordpress_Form
     }
     
     public function getOptions( $name ){
-        $options = $this->field( $name )->getCfg( 'options', array() );
+        $options = $this->field( $name )->cfg( 'options', array() );
         return is_array($options) ? $options : array();
     }
 }

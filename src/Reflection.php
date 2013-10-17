@@ -13,6 +13,11 @@ class Snap_Reflection
         
     }
     
+    public function getRegistry()
+    {
+        return $this->registry;
+    }
+    
     protected function _reflect($reflectionClass)
     {
         // get parent classes

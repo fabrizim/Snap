@@ -104,14 +104,6 @@ class Snap_Wordpress_Shortcodes extends Snap_Wordpress_Plugin
     return $this->clean_markup( ob_get_clean() );
   }
   
-  protected function _wp_add($type, $name)
-  {
-    if( $type == 'shortcode' ){
-      // we are taking care of these in this class.
-      return;
-    }
-    return parent::_wp_add($type, $name);
-  }
   
   /**
    * Return a string of html attributes from an associative array

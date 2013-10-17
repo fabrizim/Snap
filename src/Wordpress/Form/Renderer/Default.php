@@ -157,7 +157,7 @@ class Snap_Wordpress_Form_Renderer_Default
             $classes[] = 'error';
         }
         ?>
-        <div class="<?= $this->implodeUnique($classes) ?>" id="form-field-<?= $field->getName() ?>">
+        <div class="<?= $this->implodeUnique($classes) ?>" id="form-field-<?= $field->getId() ?>">
             <? $this->renderLabel( $field ) ?>
             <div class="controls">
                 <? $this->renderControl( $field ) ?>
@@ -195,14 +195,14 @@ class Snap_Wordpress_Form_Renderer_Default
         $checked = $inputValue == $field->getValue();
         $label = $field->cfg('boxlabel', $field->getLabel());
         ?>
-        <div class="<?= $this->implodeUnique( $classes ) ?>" id="form-field-<?= $field->getName() ?>">
+        <div class="<?= $this->implodeUnique( $classes ) ?>" id="<?= $field->getId() ?>">
             <div class="controls">
             <label class="checkbox"><input
                 class="checkbox"
                 type="checkbox"
                 value="<?= $inputValue ?>"
                 <? if( $checked ){ ?>checked<? } ?>
-                name="<?= $field->getName() ?>"
+                name="<?= $field->getInputName() ?>"
                 id="<?= $field->getId() ?>"
             />
             <?= $label ?><? if( $field->isRequired() ): ?> <span class="required-asterisk">*</span><? endif; ?>
@@ -243,7 +243,7 @@ class Snap_Wordpress_Form_Renderer_Default
             type="checkbox"
             value="<?= $inputValue ?>"
             <? if( $checked ){ ?>checked<? } ?>
-            name="<?= $field->getName() ?>"
+            name="<?= $field->getInputName() ?>"
             id="<?= $field->getId() ?>"
         />
         <?php
@@ -258,7 +258,7 @@ class Snap_Wordpress_Form_Renderer_Default
             class="<?= $this->implodeUnique($classes) ?>"
             type="<?= $type ?>"
             value="<?= esc_attr($field->format()->getValue()) ?>"
-            name="<?= $field->getName() ?>"
+            name="<?= $field->getInputName() ?>"
             id="<?= $field->getId() ?>"
          />
         <?php
@@ -294,20 +294,20 @@ class Snap_Wordpress_Form_Renderer_Default
             list($y,$m,$d) = explode( '-', $val );
         }
         ?>
-        <input type="hidden" name="<?= $field->getName() ?>" value="<?= $value ?>" />
-        <select name="<?=$field->getName()?>_month">
+        <input type="hidden" name="<?= $field->getInputName() ?>" value="<?= $value ?>" />
+        <select name="<?=$field->getInputName()?>_month">
             <option value="">Month</option>
             <?php foreach( $months as $i => $month ){ ?>
             <option <?php if( $m == $i+1 ){ ?>selected<? } ?> value="<?= $i+1 ?>"><?= $month ?></option>
             <?php } ?>
         </select>
-        <select name="<?=$field->getName()?>_day">
+        <select name="<?=$field->getInputName()?>_day">
             <option value="">Day</option>
             <?php for( $i=0; $i<31; $i++ ){ ?>
             <option <?php if( $d == $i+1 ){ ?>selected<? } ?> value="<?= $i+1 ?>"><?= sprintf('%02s', $i+1) ?></option>
             <?php } ?>
         </select>
-        <select name="<?=$field->getName()?>_year">
+        <select name="<?=$field->getInputName()?>_year">
             <option value="">Year</option>
             <?php for( $i=(int)date('Y'); $i>1899; $i-- ){ ?>
             <option <?php if( $y == $i ){ ?>selected<? } ?> value="<?= $i ?>"><?= $i ?></option>
@@ -339,10 +339,10 @@ class Snap_Wordpress_Form_Renderer_Default
             <input
                 type="hidden"
                 value="<?= esc_attr( $field->getValue() ) ?>"
-                name="<?= $field->getName() ?>"
+                name="<?= $field->getInputName() ?>"
             />
             <select
-                name="<? $field->getName().'_hour' ?>"
+                name="<? $field->getInputName().'_hour' ?>"
                 id="<?= $field->getId() ?>"
             >
                 <?php for( $i=1; $i<13; $i++) {
@@ -353,7 +353,7 @@ class Snap_Wordpress_Form_Renderer_Default
             </select>
             <select
                 id="<?= $field->getId() ?>"
-                name="<? $field->getName().'_minute' ?>"
+                name="<? $field->getInputName().'_minute' ?>"
                 
             >
                 <?php for( $i=0; $i<60; $i+=1) {
@@ -365,7 +365,7 @@ class Snap_Wordpress_Form_Renderer_Default
             
             <select
                 id="<?= $field->getId() ?>"
-                name="<? $field->getName().'_second' ?>"
+                name="<? $field->getInputName().'_second' ?>"
                 
             >
                 <?php for( $i=0; $i<60; $i+=1) {
@@ -377,7 +377,7 @@ class Snap_Wordpress_Form_Renderer_Default
             
             <select
                 id="<?= $field->getId() ?>"
-                name="<? $field->getName().'_ampm' ?>"
+                name="<? $field->getInputName().'_ampm' ?>"
             >
                 <?php foreach( array('AM','PM') as $i ) { ?>
                 <option <? if($a == $i ){?>selected<? } ?>><?= $i ?></option>
@@ -418,7 +418,7 @@ class Snap_Wordpress_Form_Renderer_Default
     public function renderWysiwyg( $field )
     {
         $last_field = $this->last_field ? $this->last_field->getName() : '';
-        wp_editor( $field->getValue(), $field->getName(), $last_field );
+        wp_editor( $field->getValue(), $field->getInputName(), $last_field );
     }
     
     public function renderImage( $field )
@@ -496,10 +496,11 @@ class Snap_Wordpress_Form_Renderer_Default
     {
         $options = $field->getOptions();
         $classes = $this->getControlClasses( $field, 'select' );
+        if( $field->cfg('multiple') ) $classes[] = 'select-multiple';
         ?>
-        <select
+        <select <?= $field->cfg('multiple') ? 'multiple' : '' ?>
             class="<?= $this->implodeUnique($classes) ?>"
-            name="<?= $field->getName() ?>"
+            name="<?= $field->getInputName() ?>"
             id="<?= $field->getId() ?>"
         >
             <?php foreach( $options as $value=> $label ){ ?>
@@ -522,7 +523,7 @@ class Snap_Wordpress_Form_Renderer_Default
         <li>
             <label>
                 <input
-                    name="<?= $field->getName() ?>"
+                    name="<?= $field->getInputName() ?>"
                     type="radio"
                     class="<?= $this->implodeUnique( $classes ) ?>"
                     value="<?= esc_attr( $v ) ?>"
@@ -545,7 +546,7 @@ class Snap_Wordpress_Form_Renderer_Default
         <textarea
             class="<?= $this->implodeUnique( $classes ) ?>"
             style="width: 100%;"
-            name="<?= $field->getName() ?>"
+            name="<?= $field->getInputName() ?>"
             id="<?= $field->getId() ?>"
         ><?= $field->getValue() ?></textarea>
         <?php

@@ -16,11 +16,16 @@ class Snap_Wordpress_Form_Field
     public function __construct( $name, $config = false )
     {
         $this->name = $name;
-        $this->id = self::_id();
         $this->config = new Snap_Registry();
         $this->config->import( $config );
         if( ($options=$this->cfg('options', false ) ) ){
             $this->options = $options;
+        }
+        if( $this->cfg('id') ){
+            $this->id = $this->cfg('id');
+        }
+        else {
+            $this->id = self::_id();
         }
     }
     
@@ -32,6 +37,21 @@ class Snap_Wordpress_Form_Field
     public function getId()
     {
         return $this->id;
+    }
+    
+    public function setId( $id )
+    {
+        $this->id = $id;
+    }
+    
+    public function setName( $name )
+    {
+        $this->name = $name;
+    }
+    
+    public function getInputName()
+    {
+        return $this->cfg('inputName', $this->getName() );
     }
     
     public function cfg( $name, $default=false )
