@@ -124,6 +124,7 @@ class Snap_Wordpress_Form_Field
         $validators = $this->cfg('validator', array());
         if( $this->getValue() == '' && !$this->isRequired() ) return true; 
         foreach( $validators as $key => $message ){
+            if( !$message ) continue;
             $validator = Snap_Wordpress_Form_Validator_Factory::get($key);
             $validator->setField( $this );
             if( is_string( $message ) ){

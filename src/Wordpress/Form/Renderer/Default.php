@@ -157,7 +157,7 @@ class Snap_Wordpress_Form_Renderer_Default
             $classes[] = 'error';
         }
         ?>
-        <div class="<?= $this->implodeUnique($classes) ?>" id="form-field-<?= $field->getId() ?>">
+        <div class="<?= $this->implodeUnique($classes) ?>" id="form-field-<?= $field->getName() ?>">
             <? $this->renderLabel( $field ) ?>
             <div class="controls">
                 <? $this->renderControl( $field ) ?>
