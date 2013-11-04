@@ -3,7 +3,7 @@
 class Snap_Wordpress_Form_Field
 {
     
-    static $id=0;
+    static $__id=0;
     
     protected $name;
     protected $value;
@@ -31,7 +31,7 @@ class Snap_Wordpress_Form_Field
     
     protected static function _id()
     {
-        return 'snap_field_'.(++self::$id);
+        return 'snap_field_'.(++self::$__id);
     }
     
     public function getId()
