@@ -69,7 +69,8 @@ class Snap_Wordpress_Form_Validator_Email extends Snap_Wordpress_Form_Validator
                    $isValid = false;
                 }
             }
-            if ($isValid && !(checkdnsrr($domain,"MX") ||  checkdnsrr($domain,"A")))
+            // disable DNS checks for now -- too much overhead
+            if (false && $isValid && !(checkdnsrr($domain,"MX") ||  checkdnsrr($domain,"A")))
             {
                 // domain not found in DNS
                 $isValid = false;
