@@ -48,7 +48,7 @@ class Snap_Wordpress_Shortcodes extends Snap_Wordpress_Plugin
     $content = do_shortcode( $content );
     $shortcode_tags = $orig_shortcode_tags;
     // add our dummy shortcodes in.
-    foreach( array_keys( $this->fn_map ) as $shortcode ) add_shortcode( $shortcode, array(&$this, 'dummy'));
+    //foreach( array_keys( $this->fn_map ) as $shortcode ) add_shortcode( $shortcode, array(&$this, 'dummy'));
     if( !count( $this->_processed ) ) return $content;
     return $content;
   }
@@ -58,13 +58,36 @@ class Snap_Wordpress_Shortcodes extends Snap_Wordpress_Plugin
     return $content;
   }
   
+  protected function _wp_add( $type, $name )
+  {
+    if( $type !== 'shortcode' ) return parent::_wp_add( $type, $name );
+    
+    $fn = "add_$type";
+    $_name = $this->snap->method($name, "wp.$type", false);
+    $callback = array( &$this, 'shortcode' );
+    
+    $arguments = array();
+    
+    if( is_array( $_name ) ) foreach( $_name as $n )
+      $arguments[] = array( $n, $callback );
+        
+    else
+      $arguments[] = array( is_string( $_name ) ? $_name : $name, $callback );
+    
+    foreach( $arguments as $a ){
+      $this->fn_map[$a[0]] = $name;
+      call_user_func_array( $fn, $a );
+    }
+    
+  }
+  
   protected function clean_markup( $markup )
   {
     // leave other shortcodes alone.
     $re = '/\[([a-zA-Z_-]+)\].*?\[\/\1\]/s';
     $markup = preg_replace_callback( $re, array(&$this, 'replace_with_shortcode_placeholders'), $markup);
     $markup = preg_replace_callback( '/\<(pre|textarea|code).*?\<\/\1\>/si', array(&$this, 'replace_with_html_placeholders'), $markup);
-    $markup = preg_replace('/^ */m',"",$markup);
+    $markup = preg_replace('/^ +/m',"",$markup);
     $markup = preg_replace_callback('/'.preg_quote($this->_placeholder_shortcode).'/', array(&$this, 'replace_shortcode_placeholders'), $markup);
     $markup = preg_replace_callback('/'.preg_quote($this->_placeholder_html).'/', array(&$this, 'replace_html_placeholders'), $markup);
     return $markup;
