@@ -6,13 +6,8 @@
  * @wp.posttype.plural                      Customs
  *
  * @wp.posttype.args.public                 true
- * @wp.posttype.args.publicly_queryable     true
- * @wp.posttype.args.show_ui                true
- * @wp.posttype.args.show_in_menu           true
- * @wp.posttype.args.query_var              true
  * @wp.posttype.args.rewrite                true
  * @wp.posttype.args.capability_type        post
- * @wp.posttype.args.has_archive            true
  * @wp.posttype.args.hierarchical           false
  * @wp.posttype.args.menu_position          null
  * 
