@@ -39,17 +39,20 @@ class Snap_Wordpress_PostType extends Snap_Wordpress_Plugin
     protected $single;
     protected $plural;
     
+    public function __construct()
+    {
+        parent::__construct();
+        $this->name = $this->snap->klass('wp.posttype.name', $this->name );
+    }
+    
     /**
      * @wp.action
      */
     public function init()
     {        
-        $this->snap = Snap::get( $this );
-        
         $args = $this->snap->klass('wp.posttype.args');
         $labels = $this->snap->klass('wp.posttype.labels');
         
-        $this->name = $this->snap->klass('wp.posttype.name', $this->name );
         $this->single = $this->snap->klass('wp.posttype.single', $this->single );
         $this->plural = $this->snap->klass('wp.posttype.plural', $this->plural );
         
@@ -68,6 +71,11 @@ class Snap_Wordpress_PostType extends Snap_Wordpress_Plugin
     protected function filterArgs( $args )
     {
         return $args;
+    }
+    
+    public function getName()
+    {
+        return $this->name;
     }
     
     protected function parseLabels( $labels )
