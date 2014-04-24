@@ -64,7 +64,7 @@ class Snap_Wordpress_PostType extends Snap_Wordpress_Plugin
             if( $support ) $args['supports'][] = $name;
         }
         
-        $args = apply_filters('snap_posttype_args', $args);
+        $args = apply_filters('snap_posttype_args', $args, $this->name );
         register_post_type( $this->name, $this->filterArgs($args) );
     }
     
