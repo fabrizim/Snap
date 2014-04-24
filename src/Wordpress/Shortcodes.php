@@ -6,11 +6,7 @@ class Snap_Wordpress_Shortcodes extends Snap_Wordpress_Plugin
   protected $fn_map = array();
   protected $_processed = array();
   protected $_log = array();
-  protected $_shortcode_placeholders = array();
   protected $_blocklevel = array();
-  protected $_html_placeholders = array();
-  protected $_placeholder_shortcode ='[:(shortcode_placeholder):]';
-  protected $_placeholder_html ='[:(html_placeholder):]';
   
   protected function log()
   {
