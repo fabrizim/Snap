@@ -22,7 +22,7 @@ class Snap_Wordpress_Plugin
             if( $this->snap->method($name, 'wp.action', false) ){
                 $this->_wp_add('action', $name);
             }
-            if( ($shortcode = $this->snap->method('wp.shortcode', false)) !== false ){
+            if( $this->snap->method($name, 'wp.shortcode', false) ){
                 $this->_wp_add('shortcode', $name);
             }
             if( $this->snap->method($name, 'wp.meta_box', false) || $this->snap->method($name, 'wp.metabox', false) ){

@@ -7,8 +7,14 @@ class Snap_Util_Html
     'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'
   );
   
+  /**
+   * This function creates HTML tags programatically
+   */
   public static function tag( $tag, $attributes=array(), $content='', $close = true )
   {
+    
+    if( is_string( $tag ) && strpos($tag, '<') === 0 ) return $tag;
+    
     if( is_array( $tag ) || is_object( $tag ) ){
       $tag = (array)$tag;
       if( !isset($tag['tag']) ){
@@ -16,6 +22,8 @@ class Snap_Util_Html
       }
       $attributes = @$tag['attributes'];
       $content = @$tag['content'];
+      
+      // lets allow "children" in the definition as well
       if( isset( $tag['children'] ) ){
         $content = $tag['children'];
       }
@@ -52,7 +60,7 @@ class Snap_Util_Html
     $atts = array();
     foreach( (array)$array as $name => $val ){
       if( is_array($val) ) $val = implode(' ', $val);
-      if( $val ) $atts[] = $name.'="'.esc_attr($val).'"';
+      if( $val !== false ) $atts[] = $name.'="'.esc_attr($val).'"';
     }
     return implode(' ', $atts);
   }

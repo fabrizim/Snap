@@ -17,9 +17,7 @@ class Snap_Wordpress_Form2_Field_Textarea extends Snap_Wordpress_Form2_Field_Abs
     
     $attrs = $this->apply_filters('attributes', $attrs);
     
-    $html = '<textarea '.$this->to_attributes( $attrs ).'>'
-            .$this->get_value()
-            .'</textarea>';
+    $html = Snap_Util_Html::tag('textarea', $attrs, $this->get_value());
     return $this->apply_filters('html', $html);
     
   }

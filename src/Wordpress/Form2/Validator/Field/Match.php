@@ -20,10 +20,14 @@ class Snap_Wordpress_Form2_Validator_Field_Match extends Snap_Wordpress_Form2_Va
   public function validate()
   {
     $source = $this->field->get_form()
-      ->get_field( $this->get_config('args.source') );
+      ->get_field( $this->get_config('arg.source') );
+      
     if( !$source ) return true;
+    
+    $this->variables['source'] = $source->get_config('label');
+    
     if( $source->get_value() != $this->field->get_value() ){
-      $this->setMessage( self::MISMATCH );
+      $this->add_message( self::MISMATCH );
       return false;
     }
     return true;

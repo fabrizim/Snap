@@ -30,7 +30,7 @@ class Snap_Wordpress_Form2 extends Snap_Wordpress_Plugin
   {
     if( !isset($this->fields) ){
       $this->fields = array();
-      do_action_ref_array('snap/form/field/register', array(&$this));
+      do_action_ref_array('snap/form/field/register', array(&$this) );
     }
     return $this->fields;
   }
@@ -39,7 +39,7 @@ class Snap_Wordpress_Form2 extends Snap_Wordpress_Plugin
   {
     if( !isset($this->decorators) ){
       $this->decorators = array();
-      do_action_ref_array('snap/form/decorator/register', array(&$this));
+      do_action_ref_array('snap/form/decorator/register', array(&$this) );
     }
     return $this->decorators;
   }
@@ -82,7 +82,8 @@ class Snap_Wordpress_Form2 extends Snap_Wordpress_Plugin
   }
   
   /**
-   * @wp.filter       snap/form/validator/field/register
+   * @wp.action       snap/form/validator/field/register
+   * @wp.priority     5
    */
   public function register_default_field_validators( $form )
   {
@@ -90,7 +91,8 @@ class Snap_Wordpress_Form2 extends Snap_Wordpress_Plugin
   }
   
   /**
-   * @wp.filter       snap/form/validator/form/register
+   * @wp.action       snap/form/validator/form/register
+   * @wp.priority     5
    */
   public function register_default_form_validators( $form )
   {
@@ -98,7 +100,8 @@ class Snap_Wordpress_Form2 extends Snap_Wordpress_Plugin
   }
   
   /**
-   * @wp.filter       snap/form/decorator/register
+   * @wp.action       snap/form/decorator/register
+   * @wp.priority     5
    */
   public function register_default_decorators( $form )
   {
@@ -106,7 +109,8 @@ class Snap_Wordpress_Form2 extends Snap_Wordpress_Plugin
   }
   
   /**
-   * @wp.filter       snap/form/field/register
+   * @wp.action       snap/form/field/register
+   * @wp.priority     5
    */
   public function register_default_fields( $form )
   {

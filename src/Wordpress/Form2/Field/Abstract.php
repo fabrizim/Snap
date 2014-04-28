@@ -7,11 +7,14 @@ abstract class Snap_Wordpress_Form2_Field_Abstract
   protected $config;
   protected $value;
   protected $form;
-  protected $messages;
+  protected $messages = array();
+  protected $errors = array();
   protected $description;
+  protected $valid = true;
   protected $classes = array();
   protected $validators = array();
   protected $required = false;
+  protected $style = 'input';
   
   public function __construct( $name='', $config=array() )
   {
@@ -19,7 +22,21 @@ abstract class Snap_Wordpress_Form2_Field_Abstract
     $this->name = $name;
     $this->type = Snap::get($this)->klass('field.name');
     $this->config = new Snap_Registry(false);
-    if( $config ) $this->config->import( (array)$config );
+    if( $config ){
+      $this->config->import( (array)$config );
+      if( $this->config->get('required') ){
+        $this->set_required( $this->config->get('requiredMessage') );
+      }
+      if( $this->config->get( 'validators' ) ){
+        foreach( $this->config->get( 'validators' ) as $cfg ){
+          $classname = $cfg['classname'];
+          $this->add_validator(new $classname( $cfg ));
+        }
+      }
+      if( $this->config->get('label') ){
+        $this->label = $this->config->get('label');
+      }
+    }
     $this->init();
   }
   
@@ -28,32 +45,52 @@ abstract class Snap_Wordpress_Form2_Field_Abstract
     
   }
   
+  public function get_style()
+  {
+    return $this->style;
+  }
+  
+  public function reset()
+  {
+    $this->value = null;
+    $this->valid = true;
+    $this->errors = array();
+    $this->messages = array();
+  }
+  
   public function add_validator( $validator )
   {
+    $validator->set_field( $this );
     $this->validators = array_merge( $this->validators, array($validator) );
-    if( $validator instanceof Snap_Wordpress_Form2_Validator_Required ){
+    if( $validator instanceof Snap_Wordpress_Form2_Validator_Field_Required ){
       $this->required = true;
     }
   }
   
   public function set_required( $message=null )
   {
-    $this->add_validator(new Snap_Wordpress_Form2_Validator_Required(array(
-      'message' => $message
-    )));
+    $this->add_validator(new Snap_Wordpress_Form2_Validator_Field_Required(array(
+      'message' => array( 'Default' => $message )
+    ), $this));
   }
   
   public function validate()
   {
-    $valid = true;
+    $this->valid = true;
     foreach( $this->validators as $validator ){
       if( $this->required || $this->get_value() !== ''){
         if( !$validator->validate( $this ) ){
-          $valid = false;
+          $this->valid = false;
+          $this->errors[ $validator->get_name() ] = $validator->get_messages();
         }
       }
     }
-    return $valid;
+    return $this->valid;
+  }
+  
+  public function get_errors()
+  {
+    return $this->errors;
   }
   
   public function set_form( $form )
@@ -111,10 +148,10 @@ abstract class Snap_Wordpress_Form2_Field_Abstract
     $this->value = $value;
   }
   
-  public function get_config( $key=null )
+  public function get_config( $key=null, $default=null )
   {
     if( $key ){
-      return $this->apply_filters('config', $this->config->get( $key ));
+      return $this->apply_filters('config', $this->config->get( $key, $default ));
     }
     return $this->config;
   }
@@ -137,6 +174,11 @@ abstract class Snap_Wordpress_Form2_Field_Abstract
   public function get_classes()
   {
     return (array) $this->apply_filters( 'classes', $this->classes );
+  }
+  
+  public function is_valid()
+  {
+    return $this->valid;
   }
   
   public function get_html()
@@ -166,13 +208,4 @@ abstract class Snap_Wordpress_Form2_Field_Abstract
     return $value;
   }
   
-  protected function to_attributes( $array )
-  {
-    $atts = array();
-    foreach( $array as $name => $val ){
-      if( is_array($val) ) $val = implode(' ', $val);
-      if( $val ) $atts[] = $name.'="'.esc_attr($val).'"';
-    }
-    return implode(' ', $atts);
-  }
 }

@@ -6,6 +6,7 @@ abstract class Snap_Wordpress_Form2_Validator_Form_Abstract extends Snap_Wordpre
   {
     parent::__construct( $config );
     if( $form ) $this->form = $form;
+    $this->name = Snap::get($this)->klass('validator_form.name');
   }
   
   public function set_form( $form )

@@ -2,6 +2,7 @@
 
 abstract class Snap_Wordpress_Form2_Validator_Abstract
 {
+  
   public static $message_templates = array();
   
   protected $name = 'abstract';
@@ -12,6 +13,7 @@ abstract class Snap_Wordpress_Form2_Validator_Abstract
   {
     $this->config = new Snap_Registry();
     $this->config->import( (array) $config );
+    $this->name = Snap::get($this)->klass('name');
   }
   
   public function set_config( $config, $value=null )
@@ -37,13 +39,19 @@ abstract class Snap_Wordpress_Form2_Validator_Abstract
   
   public function get_message( $key )
   {
-    $message = $this->config->get( 'message.'.$key, isset(self::$message_templates[$key]) ? self::$message_templates[$key] : '' );
+    $message = $this->config->get( 'message.'.$key, isset(static::$message_templates[$key]) ? static::$message_templates[$key] : '' );
+    
     // replace message variables
     foreach( $this->variables as $key => $val ){
       if( is_array( $val ) ) $val = '['.implode(', ',$val).']';
-      $message = str_replace( "%$key%", $val );
+      $message = str_replace( "%$key%", $val, $message );
     }
     return $message;
+  }
+  
+  public function get_messages()
+  {
+    return $this->messages;
   }
   
   public function set_variable( $name, $value )

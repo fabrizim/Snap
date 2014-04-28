@@ -29,8 +29,8 @@ class Snap_Wordpress_Form2_Field_Select extends Snap_Wordpress_Form2_Field_Abstr
       $options[] = array(
         'tag'           => 'option',
         'attributes'    => array(
-            'val'           => $value
-          , 'selected'      => $this->get_value() == $value ? 'selected' : false
+            'value'         => $value
+          , 'selected'      => $this->get_value() === $value ? 'selected' : false
         ),
         'content'       => $text
       );
