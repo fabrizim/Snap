@@ -74,6 +74,11 @@ abstract class Snap_Wordpress_Form2_Field_Abstract
     ), $this));
   }
   
+  public function is_required()
+  {
+    return $this->required;
+  }
+  
   public function validate()
   {
     $this->valid = true;

@@ -15,7 +15,7 @@ class Snap_Wordpress_Shortcodes extends Snap_Wordpress_Plugin
   }
   
   /**
-   * @wp.filter
+   * @wp.filter         ["the_content", "acf_the_content"]
    * @wp.priority 10
    */
   public function the_content( $content )
