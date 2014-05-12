@@ -28,4 +28,14 @@ class Snap_Wordpress_Form2_Validator_Field_Regexp extends Snap_Wordpress_Form2_V
     }
     return true;
   }
+  
+  public function get_jquery_validate_config()
+  {
+    return array(
+      'pattern' => array(
+        'arg'     => $this->config->get('arg.exp'),
+        'message' => $this->get_message( self::MISMATCH )
+      )
+    );
+  }
 }

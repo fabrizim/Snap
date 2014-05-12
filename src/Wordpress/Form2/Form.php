@@ -13,10 +13,13 @@ class Snap_Wordpress_Form2_Form
   {
     $this->config = new Snap_Registry();
     if( $config ) $this->config->import( $config );
+    // we should register this with the Form2 factory
+    Snap_Wordpress_Form2::register_form( $this );
   }
   
-  public function get_config()
+  public function get_config($key=null, $default=null)
   {
+    if( $key ) return $this->config->get($key, $default);
     return $this->config;
   }
   
@@ -74,7 +77,7 @@ class Snap_Wordpress_Form2_Form
     }
     
     // then go through form level validators
-    foreach( $this->validators as $validator ){
+    foreach( $this->validators as $name => $validator ){
       if( !$validator->validate() ){
         $this->errors['form'][$validator->get_name()] = $validator->get_messages();
         $this->valid = false;
@@ -96,12 +99,16 @@ class Snap_Wordpress_Form2_Form
   
   public function get_field_errors()
   {
-    return $this->errors['fields'];
+    return count($this->errors['fields']) ?
+      $this->errors['fields'] :
+      false;
   }
   
   public function get_form_errors()
   {
-    return $this->errors['form'];
+    return count($this->errors['form']) ?
+      $this->errors['form'] :
+      false;
   }
   
   public function set_data( $data )
@@ -111,6 +118,17 @@ class Snap_Wordpress_Form2_Form
         $this->get_field($key)->set_value($value);
       }
     }
+  }
+  
+  public function get_jquery_validate_config()
+  {
+    $config = array();
+    foreach( $this->fields as $name => $field ){
+      if( ($field_config = $field->get_jquery_validate_config()) ){
+        $config[$name] = $field_config;
+      }
+    }
+    return $config;
   }
   
 }

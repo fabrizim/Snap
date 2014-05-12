@@ -67,6 +67,11 @@ abstract class Snap_Wordpress_Form2_Field_Abstract
     }
   }
   
+  public function get_validators()
+  {
+    return $this->validators;
+  }
+  
   public function set_required( $message=null )
   {
     $this->add_validator(new Snap_Wordpress_Form2_Validator_Field_Required(array(
@@ -211,6 +216,19 @@ abstract class Snap_Wordpress_Form2_Field_Abstract
     $value = apply_filters($filter.'?type='.$this->get_type(), $value, $this);
     $value = apply_filters($filter.'?id='.$this->get_id(), $value, $this);
     return $value;
+  }
+  
+  public function get_jquery_validate_config()
+  {
+    $field_config = array();
+    foreach( $this->get_validators() as $validator ){
+      $field_config = array_merge( $field_config, $validator->get_jquery_validate_config() );
+    }
+    if( count( $field_config ) ){
+      return $field_config;
+    }
+    return false;
+    
   }
   
 }

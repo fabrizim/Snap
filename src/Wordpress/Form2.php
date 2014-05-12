@@ -8,6 +8,9 @@ class Snap_Wordpress_Form2 extends Snap_Wordpress_Plugin
   protected $fields;
   protected $decorators;
   
+  protected static $forms = array();
+  protected static $_id = 0;
+  
   public function get_field_validators()
   {
     if( !isset($this->field_validators) ){
@@ -177,6 +180,23 @@ class Snap_Wordpress_Form2 extends Snap_Wordpress_Plugin
     }
     $class = $fields[$type]['classname'];
     return new $class( $name, $options );
+  }
+  
+  public static function register_form( $form )
+  {
+    $id = $form->get_config('id');
+    if( !$id ) $id = self::next_id();
+    self::$forms[$id] = $form;
+  }
+  
+  public static function get_form( $id )
+  {
+    return isset(self::$forms[$id]) ? self::$forms[$id] : null;
+  }
+  
+  public static function next_id()
+  {
+    return 'form2_'.(++self::$_id);
   }
   
 }

@@ -32,5 +32,10 @@ abstract class Snap_Wordpress_Form2_Validator_Field_Abstract extends Snap_Wordpr
   {
     return $this->value;
   }
+  
+  public function get_jquery_validate_config()
+  {
+    return new stdClass;
+  }
 
 }

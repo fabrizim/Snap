@@ -22,4 +22,13 @@ class Snap_Wordpress_Form2_Validator_Field_Email extends Snap_Wordpress_Form2_Va
     }
     return true;
   }
+  
+  public function get_jquery_validate_config()
+  {
+    return array(
+      'email' => array(
+        'message' => $this->get_message( self::INVALID_EMAIL )
+      )
+    );
+  }
 }

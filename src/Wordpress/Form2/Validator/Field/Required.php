@@ -23,4 +23,13 @@ class Snap_Wordpress_Form2_Validator_Field_Required extends Snap_Wordpress_Form2
     }
     else return true;
   }
+  
+  public function get_jquery_validate_config()
+  {
+    return array(
+      'required' => array(
+        'message' => $this->get_message( self::REQUIRED )
+      )
+    );
+  }
 }
