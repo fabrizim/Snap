@@ -10,12 +10,13 @@ class Snap_Wordpress_View
   
   public function set($name, $value=null)
   {
-    if( $value === null && is_array($name) ){
-      $this->locals = array_merge( $this->locals, $name);
+    if( $value === null && (is_array($name) || is_object($name)) ){
+      $this->locals = array_merge( $this->locals, (array)$name);
     }
     else if( isset($value) ){
       $this->locals[$name] = $value;
     }
+    return $this;
   }
   
   public function render()
