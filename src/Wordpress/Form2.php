@@ -6,6 +6,7 @@ class Snap_Wordpress_Form2 extends Snap_Wordpress_Plugin
   protected $field_validators;
   protected $form_validators;
   protected $fields;
+  protected $field_options;
   protected $decorators;
   
   protected static $forms = array();
@@ -45,6 +46,17 @@ class Snap_Wordpress_Form2 extends Snap_Wordpress_Plugin
       do_action_ref_array('snap/form/decorator/register', array(&$this) );
     }
     return $this->decorators;
+  }
+  
+  public function get_extra_field_options()
+  {
+    if( !isset($this->field_options) ){
+      $this->field_options = apply_filters('snap/form/field/options', array(
+        'description' => array('label'=>'Description'),
+        'classes'     => array('label'=>'Classes')
+      ));
+    }
+    return $this->field_options;
   }
   
   public function register_validator_field($name, $config)

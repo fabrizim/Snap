@@ -20,6 +20,8 @@ class Snap_Wordpress_Form2_Decorator_Bootstrap3 extends Snap_Wordpress_Form2_Dec
     
     $children = array();
     
+    if( in_array( $field->get_style(), array('hidden', 'raw') ) ) return $html;
+    
     if( $field->get_style() != 'checkbox' && ($label = $field->get_label()) ){
       // lets create a label and add description...
       $children[] = Snap_Util_Html::tag('label', array(
