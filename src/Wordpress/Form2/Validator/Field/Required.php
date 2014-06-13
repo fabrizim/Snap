@@ -17,7 +17,7 @@ class Snap_Wordpress_Form2_Validator_Field_Required extends Snap_Wordpress_Form2
   
   public function validate()
   {
-    if( !$this->field->get_value() ){
+    if( $this->field->is_empty() ){
       $this->add_message( self::REQUIRED );
       return false;
     }
