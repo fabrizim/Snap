@@ -88,7 +88,7 @@ abstract class Snap_Wordpress_Form2_Field_Abstract
   {
     $this->valid = true;
     foreach( $this->validators as $validator ){
-      if( $this->required || $this->get_value() !== ''){
+      if( $this->required || !$this->is_empty()){
         if( !$validator->validate( $this ) ){
           $this->valid = false;
           $this->errors[ $validator->get_name() ] = $validator->get_messages();
@@ -153,6 +153,11 @@ abstract class Snap_Wordpress_Form2_Field_Abstract
     return $this->value;
   }
   
+  public function get_value_formatted()
+  {
+    return $this->get_value();
+  }
+  
   public function set_value( $value )
   {
     $this->value = $value;
@@ -189,6 +194,11 @@ abstract class Snap_Wordpress_Form2_Field_Abstract
   public function is_valid()
   {
     return $this->valid;
+  }
+  
+  public function is_empty()
+  {
+    return $this->value ? false : true;
   }
   
   public function get_html()
