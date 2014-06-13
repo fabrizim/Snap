@@ -24,6 +24,7 @@ class Snap_Wordpress_Form2_Decorator_Bootstrap3 extends Snap_Wordpress_Form2_Dec
     
     if( $field->get_style() != 'checkbox' && ($label = $field->get_label()) ){
       // lets create a label and add description...
+      if( $field->is_required() ) $label.='*';
       $children[] = Snap_Util_Html::tag('label', array(
         'for'         => $field->get_id(),
         'class'       => 'control-label'
@@ -34,7 +35,7 @@ class Snap_Wordpress_Form2_Decorator_Bootstrap3 extends Snap_Wordpress_Form2_Dec
     
     if( ($description = $field->get_config('description')) ){
       $children[] = Snap_Util_Html::tag('span', array(
-        'class'       => 'help-block'
+        'class'       => 'help-block form-control-description'
       ), $description);
     }
     

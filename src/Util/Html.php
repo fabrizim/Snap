@@ -13,7 +13,7 @@ class Snap_Util_Html
   public static function tag( $tag, $attributes=array(), $content='', $close = true )
   {
     
-    if( is_string( $tag ) && strpos($tag, '<') === 0 ) return $tag;
+    if( is_string( $tag ) && strpos($tag, '<') !== false) return $tag;
     
     if( is_array( $tag ) || is_object( $tag ) ){
       $tag = (array)$tag;

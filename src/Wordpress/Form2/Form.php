@@ -43,7 +43,7 @@ class Snap_Wordpress_Form2_Form
   {
     $data = array();
     foreach( $this->fields as $name => $field ){
-      $data[$name] = $field->get_value();
+      $data[$name] = $field->get_value_formatted();
     }
     return $data;
   }
