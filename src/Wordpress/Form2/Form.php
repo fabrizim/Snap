@@ -63,27 +63,30 @@ class Snap_Wordpress_Form2_Form
     $this->validators[$validator->get_name()] = $validator;
   }
   
-  public function validate( $data = null )
+  public function validate( $data = null, $validate_fields = null )
   {
     $this->valid = true;
     if( $data !== null ) $this->set_data( $data );
     
     // first run our field validators
     foreach( $this->fields as $field ){
-      if( !$field->validate() ){
+      $validate_field = !$validate_fields || (is_array($validate_fields) && in_array($field->get_name(), $validate_fields) );
+      if( $validate_field && !$field->validate() ){
         $this->errors['fields'][$field->get_name()] = $field->get_errors();
         $this->valid = false;
       }
     }
     
     // then go through form level validators
-    foreach( $this->validators as $name => $validator ){
+    if( !$validate_fields ) foreach( $this->validators as $name => $validator ){
       if( !$validator->validate() ){
         $this->errors['form'][$validator->get_name()] = $validator->get_messages();
         $this->valid = false;
       }
     }
-    $this->validated = true;
+    if( !$validate_fields ){
+      $this->validated = true;
+    }
     return $this->valid;
   }
   
