@@ -48,7 +48,7 @@ class Snap_Wordpress_Form2_Decorator_Bootstrap3 extends Snap_Wordpress_Form2_Dec
       ), $messages[0]);
     }
     
-    $classes = array('form-group');
+    $classes = array('form-group', 'control-type-'.$field->get_type());
     if( !$field->is_valid() ) $classes[] = 'has-error';
     if( ($style = $field->get_style()) ) $classes[] = $style;
     
