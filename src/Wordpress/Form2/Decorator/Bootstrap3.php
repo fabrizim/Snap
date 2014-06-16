@@ -54,7 +54,8 @@ class Snap_Wordpress_Form2_Decorator_Bootstrap3 extends Snap_Wordpress_Form2_Dec
     if( ($style = $field->get_style()) ) $classes[] = $style;
     
     return Snap_Util_Html::tag('div', array(
-      'class'   => $classes
+      'class'       => $classes,
+      'data-field'  => $field->get_name()
     ), $children);
     
   }
