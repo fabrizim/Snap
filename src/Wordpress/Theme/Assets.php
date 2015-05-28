@@ -18,21 +18,31 @@ class Snap_Wordpress_Theme_Assets
     
     $manifest = $this->dist_dir.'/'.$manifest;
     if( file_exists($manifest) ){
-      $this->manifest = json_decode( file_get_contents( $manifest ) );
+      $this->manifest = json_decode( file_get_contents( $manifest ), true );
     }
   }
   
-  public function script($file, $name=null, $deps=null, $footer=true, $ver=null)
+  public function script($file, $name=null, $deps=null, $ver=null, $footer=true)
   {
     if( !$name ) $name = sanitize_title( basename( $file, '.js' ) );
-    $path = $this->dist_path.'/'.(isset( $this->manifest[$file] ) ? $this->manifest[$file] : $file);
-    wp_enqueue_script($name, $path, $deps, $footer, $ver );
+    $key = basename( $file );
+    $directory = dirname( $file );
+    $path = $this->dist_path.'/'.
+      (isset( $this->manifest[$key] ) ?
+        ($directory .'/'. $this->manifest[$key]) : $file);
+        
+    wp_enqueue_script($name, $path, $deps, $ver, $footer );
   }
   
   public function style($file, $name=null, $deps=null, $ver=null)
   {
     if( !$name ) $name = sanitize_title( basename( $file, '.css' ) );
-    $path = $this->dist_path.'/'.(isset( $this->manifest[$file] ) ? $this->manifest[$file] : $file);
+    $key = basename( $file );
+    $directory = dirname( $file );
+    $path = $this->dist_path.'/'.
+      (isset( $this->manifest[$key] ) ?
+        ($directory .'/'. $this->manifest[$key]) : $file);
+        
     wp_enqueue_style($name, $path, $deps, $ver );
   }
 }

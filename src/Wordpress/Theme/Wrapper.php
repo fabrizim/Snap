@@ -6,6 +6,11 @@ class Snap_Wordpress_Theme_Wrapper extends Snap_Wordpress_Plugin
   protected $main_template;
   protected $base;
   
+  public function get_base()
+  {
+    return $this->base;
+  }
+  
   /**
    * @wp.filter             template_include
    * @wp.priority           100

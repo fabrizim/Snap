@@ -70,7 +70,7 @@ class Snap_Wordpress_Theme extends Snap_Wordpress_Plugin
   {
     $navs       = apply_filters('snap/theme/navs', []);
     foreach( $navs as $key => $description ){
-      register_nav_men( $key, $description );
+      register_nav_menu( $key, $description );
     }
   }
   
@@ -90,7 +90,12 @@ class Snap_Wordpress_Theme extends Snap_Wordpress_Plugin
   
   protected function add_theme_support()
   {
-    $defaults = ['title-tag','post-thumbnails','post-formats','html5'];
+    $defaults = [
+      'title-tag'         => true,
+      'post-thumbnails'   => ['post'],
+      'post-formats'      => ['gallery','image','quote'],
+      'html5'             => true
+    ];
     $support = apply_filters('snap/theme/add_theme_support', $defaults);
     foreach( $support as $key => $args ){
       add_theme_support( $key, $args );

@@ -6,11 +6,16 @@ class Snap_Reflection
     
     public function __construct($className)
     {
-        $this->registry = new Snap_Registry();
-        
-        $reflectionClass = new ReflectionClass( $className );
-        $this->_reflect( $reflectionClass );
-        
+        if( function_exists('wp_cache_get') &&
+            ($reg = wp_cache_get($className, 'snap-registry')) ){
+            $this->registry = $reg;
+        }
+        else {
+            $this->registry = new Snap_Registry();
+            $reflectionClass = new ReflectionClass( $className );
+            $this->_reflect( $reflectionClass );
+            wp_cache_set($className, $this->registry, 'snap-registry');
+        }
     }
     
     public function getRegistry()

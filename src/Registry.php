@@ -1,6 +1,6 @@
 <?php
 
-class Snap_Registry
+class Snap_Registry implements Serializable
 {
     
     private $data = array();
@@ -93,5 +93,14 @@ class Snap_Registry
                 $current[$key] = $value;
             }
         }
+    }
+    
+    public function serialize()
+    {
+        return serialize($this->data);
+    }
+    public function unserialize( $data )
+    {
+        $this->data = unserialize($data);
     }
 }
