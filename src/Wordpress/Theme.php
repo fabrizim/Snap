@@ -107,4 +107,29 @@ class Snap_Wordpress_Theme extends Snap_Wordpress_Plugin
     }
   }
   
+  public function get_title()
+  {
+    $title = null;
+    if (is_home()) {
+      if (get_option('page_for_posts', true)) {
+        $title = get_the_title(get_option('page_for_posts', true));
+      } else {
+        $title = __('Latest Posts', 'snap');
+      }
+    }
+    elseif (is_archive()) {
+      $title = get_the_archive_title();
+    }
+    elseif (is_search()) {
+      $title = sprintf(__('Search Results for %s', 'snap'), get_search_query());
+    }
+    elseif (is_404()) {
+      $title = __('Not Found', 'sage');
+    }
+    else {
+      $title = get_the_title();
+    }
+    return apply_filters('snap/theme/title', $title);
+  }
+  
 }
