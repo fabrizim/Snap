@@ -25,24 +25,21 @@ class Snap_Wordpress_Theme_Assets
   public function script($file, $name=null, $deps=null, $ver=null, $footer=true)
   {
     if( !$name ) $name = sanitize_title( basename( $file, '.js' ) );
-    $key = basename( $file );
-    $directory = dirname( $file );
-    $path = $this->dist_path.'/'.
-      (isset( $this->manifest[$key] ) ?
-        ($directory .'/'. $this->manifest[$key]) : $file);
-        
-    wp_enqueue_script($name, $path, $deps, $ver, $footer );
+    wp_enqueue_script($name, $this->get_path($file), $deps, $ver, $footer );
   }
   
   public function style($file, $name=null, $deps=null, $ver=null)
   {
     if( !$name ) $name = sanitize_title( basename( $file, '.css' ) );
+    wp_enqueue_style($name, $this->get_path($file), $deps, $ver );
+  }
+  
+  public function get_path($file)
+  {
     $key = basename( $file );
     $directory = dirname( $file );
-    $path = $this->dist_path.'/'.
+    return $this->dist_path.'/'.
       (isset( $this->manifest[$key] ) ?
         ($directory .'/'. $this->manifest[$key]) : $file);
-        
-    wp_enqueue_style($name, $path, $deps, $ver );
   }
 }

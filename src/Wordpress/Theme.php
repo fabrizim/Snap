@@ -98,7 +98,12 @@ class Snap_Wordpress_Theme extends Snap_Wordpress_Plugin
     ];
     $support = apply_filters('snap/theme/add_theme_support', $defaults);
     foreach( $support as $key => $args ){
-      add_theme_support( $key, $args );
+      if( $args === true || $args === null ){
+        add_theme_support( $key );
+      }
+      else {
+        add_theme_support( $key, $args );
+      }
     }
   }
   
