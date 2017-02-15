@@ -36,10 +36,14 @@ class Snap_Wordpress_Theme_Assets
   
   public function get_path($file)
   {
-    $key = basename( $file );
-    $directory = dirname( $file );
+    $key = $file;
+    $directory = '';
+    if( !preg_match('#/#', $file) ){
+      $key = basename( $file );
+      $directory = dirname( $file );
+    }
     return $this->dist_path.'/'.
       (isset( $this->manifest[$key] ) ?
-        ($directory .'/'. $this->manifest[$key]) : $file);
+        ($directory . $this->manifest[$key]) : $file);
   }
 }

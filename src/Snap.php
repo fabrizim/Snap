@@ -11,12 +11,16 @@ class Snap {
     
     private static $objects = array();
     
+    private static $time = 0;
+    
     public static function &get( $className )
     {
         if( is_object( $className) ) $className = get_class( $className );
         
         if( !isset( self::$cache[$className] ) ){
+            $start = microtime(true);
             self::$cache[$className] = new Snap_Reflection( $className );
+            self::$time += (microtime(true)-$start);
         }
         return self::$cache[$className];
     }
@@ -44,6 +48,11 @@ class Snap {
     public static function inst( $className )
     {
         return self::singleton( $className );
+    }
+    
+    public static function get_time()
+    {
+      return self::$time;
     }
 }
 

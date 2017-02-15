@@ -41,7 +41,7 @@ class Snap_Wordpress_Plugin
     {
         $fn = "add_$type";
         $_name = $this->snap->method($name, "wp.$type", false);
-        $priority = $this->snap->method( $name, 'wp.priority');
+        $priority = $this->snap->method( $name, 'wp.priority', 10);
         $args = $this->snap->method( $name, 'wp.args', $this->snap->method( $name, 'snap.arguments', 1 ) );
         $callback = array( &$this, $name );
         

@@ -35,6 +35,14 @@ class Snap_Wordpress_Shortcodes extends Snap_Wordpress_Plugin
     return $content;
   }
   
+  /**
+   * @wp.filter
+   */
+  public function no_texturize_shortcodes( $shortcodes )
+  {
+    return array_merge( $shortcodes, array_keys( $this->fn_map ) );
+  }
+  
   protected function _wp_add( $type, $name )
   {
     if( $type !== 'shortcode' ) return parent::_wp_add( $type, $name );
