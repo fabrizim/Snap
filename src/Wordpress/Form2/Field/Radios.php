@@ -23,6 +23,17 @@ class Snap_Wordpress_Form2_Field_Radios extends Snap_Wordpress_Form2_Field_Abstr
     
     foreach( $this->get_options() as $value => $text ){
       $id = !count($items) ? $this->get_id() : ($this->get_id().'_'.count($items));
+      $inputAttrs = array(
+        'name'          => $this->get_name(),
+        'type'          => 'radio',
+        'value'         => $value,
+        'id'            => $id
+      );
+      
+      if( $value === $this->get_value() ){
+        $inputAttrs['checked'] = 'checked';
+      }
+      
       $items[] = array(
         'tag'           => 'li',
         'attributes'    => array(
@@ -38,12 +49,7 @@ class Snap_Wordpress_Form2_Field_Radios extends Snap_Wordpress_Form2_Field_Abstr
             'children'      => array(
               array(
                 'tag'           => 'input',
-                'attributes'    => array(
-                  'name'          => $this->get_name(),
-                  'type'          => 'radio',
-                  'value'         => $value,
-                  'id'            => $id
-                )
+                'attributes'    => $inputAttrs
               ),
               array(
                 'tag'           => 'span',
